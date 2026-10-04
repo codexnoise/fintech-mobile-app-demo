@@ -1,0 +1,37 @@
+:root {
+  --brand: #4338ca; /* marca del aliado: distinta a Nexo a propósito */
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --text: #111827;
+  --muted: #4b5563;
+  --border: #e5e7eb;
+  --success: #15803d;
+  --error: #b91c1c;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+* { box-sizing: border-box; }
+body { margin: 0; padding: env(safe-area-inset-top) 16px 24px; }
+.partner { display: flex; align-items: center; gap: 12px; padding: 16px 0; }
+.logo { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; background: var(--brand); color: #fff; font-size: 22px; }
+.partner-name { margin: 0; font-weight: 700; }
+.partner-sub { margin: 0; color: var(--muted); font-size: 13px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 16px; }
+.status[data-tone='error'] { border-color: var(--error); color: var(--error); }
+.status[data-tone='success'] { border-color: var(--success); color: var(--success); }
+h1 { font-size: 22px; margin: 0 0 4px; }
+.muted { color: var(--muted); margin-top: 0; }
+label { display: block; font-weight: 600; margin: 16px 0 6px; }
+select, input[type='number'] { width: 100%; min-height: 48px; padding: 0 12px; border: 1px solid var(--border); border-radius: 12px; font-size: 16px; background: #fff; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+fieldset { border: 0; padding: 0; margin: 16px 0 0; }
+legend { font-weight: 600; margin-bottom: 6px; }
+.option { font-weight: 400; display: flex; gap: 10px; align-items: center; min-height: 48px; margin: 0; }
+.price { display: flex; flex-direction: column; gap: 4px; margin: 20px 0; }
+.price strong { font-size: 32px; }
+.badge { align-self: flex-start; background: #ede9fe; color: var(--brand); border-radius: 999px; padding: 4px 10px; font-size: 13px; font-weight: 600; }
+button { width: 100%; min-height: 52px; border: 0; border-radius: 12px; font-size: 16px; font-weight: 700; background: var(--brand); color: #fff; margin-top: 8px; }
+button.secondary { background: transparent; color: var(--brand); }
+button:disabled { opacity: 0.6; }
+.legal { color: var(--muted); font-size: 12px; text-align: center; }
