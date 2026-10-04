@@ -14,7 +14,9 @@ final class Money implements Comparable<Money> {
     final digits = input.replaceAll(RegExp(r'[^0-9]'), '');
     if (digits.isEmpty) return Money.zero(currency: currency);
     // Limitamos la longitud para evitar overflow por entradas absurdas.
-    final safe = digits.length > 15 ? digits.substring(digits.length - 15) : digits;
+    final safe = digits.length > 15
+        ? digits.substring(digits.length - 15)
+        : digits;
     return Money(int.parse(safe), currency: currency);
   }
 

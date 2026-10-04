@@ -54,8 +54,12 @@ class SduiParser {
       document: SduiDocument(
         schemaVersion: schemaVersion,
         screen: screen,
-        segment: json['segment'] is String ? json['segment']! as String : 'default',
-        ttl: Duration(seconds: ttlSeconds is int && ttlSeconds > 0 ? ttlSeconds : 300),
+        segment: json['segment'] is String
+            ? json['segment']! as String
+            : 'default',
+        ttl: Duration(
+          seconds: ttlSeconds is int && ttlSeconds > 0 ? ttlSeconds : 300,
+        ),
         components: List.unmodifiable(components),
         version: json['version'] is String ? json['version']! as String : null,
       ),
@@ -95,7 +99,9 @@ class SduiParser {
     return SduiComponent(
       id: id,
       type: type,
-      props: props == null ? const {} : Map.unmodifiable(props as Map<String, Object?>),
+      props: props == null
+          ? const {}
+          : Map.unmodifiable(props as Map<String, Object?>),
       minAppVersion: minVersion is String ? minVersion : null,
     );
   }
@@ -117,7 +123,9 @@ class SduiParser {
             : null;
       case 'open_assistant':
         final promptId = raw['promptId'];
-        return OpenAssistantAction(promptId: promptId is String ? promptId : null);
+        return OpenAssistantAction(
+          promptId: promptId is String ? promptId : null,
+        );
       default:
         return null;
     }

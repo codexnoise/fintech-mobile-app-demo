@@ -25,7 +25,10 @@ void main() {
       expect(const NetworkFailure().isRetryable, isTrue);
       expect(const TimeoutFailure().isRetryable, isTrue);
       expect(const ServiceUnavailableFailure().isRetryable, isTrue);
-      expect(const ValidationFailure('insufficient_funds').isRetryable, isFalse);
+      expect(
+        const ValidationFailure('insufficient_funds').isRetryable,
+        isFalse,
+      );
       expect(const UnauthorizedFailure().isRetryable, isFalse);
     });
   });

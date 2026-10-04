@@ -20,7 +20,11 @@ void main() {
     test('parsea un documento válido', () {
       final result = parser.parse(
         doc([
-          {'id': 'g', 'type': 'greeting_header', 'props': {'title': 'Hola'}},
+          {
+            'id': 'g',
+            'type': 'greeting_header',
+            'props': {'title': 'Hola'},
+          },
         ]),
         appVersion: '1.0.0',
       );
@@ -82,10 +86,12 @@ void main() {
     });
 
     test('usa ttl por defecto si viene inválido', () {
-      final result = parser.parse(
-        {'schemaVersion': 1, 'screen': 'home', 'components': <Object?>[], 'ttlSeconds': -5},
-        appVersion: '1.0.0',
-      );
+      final result = parser.parse({
+        'schemaVersion': 1,
+        'screen': 'home',
+        'components': <Object?>[],
+        'ttlSeconds': -5,
+      }, appVersion: '1.0.0');
       expect(result.document.ttl, const Duration(seconds: 300));
       expect(result.document.segment, 'default');
     });
@@ -98,13 +104,19 @@ void main() {
         isA<NavigateAction>(),
       );
       expect(
-        parser.parseAction({'type': 'open_micro_app', 'appId': 'travel_insurance'}),
+        parser.parseAction({
+          'type': 'open_micro_app',
+          'appId': 'travel_insurance',
+        }),
         isA<OpenMicroAppAction>(),
       );
     });
 
     test('rechaza rutas, apps y tipos no permitidos', () {
-      expect(parser.parseAction({'type': 'navigate', 'route': '/admin'}), isNull);
+      expect(
+        parser.parseAction({'type': 'navigate', 'route': '/admin'}),
+        isNull,
+      );
       expect(
         parser.parseAction({'type': 'open_micro_app', 'appId': 'evil'}),
         isNull,
