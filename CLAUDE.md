@@ -3,6 +3,20 @@
 Plataforma financiera digital (prueba técnica Banco Internacional). Spec de trabajo (local, no versionado)
 en `docs/private/spec.md`; arquitectura en `docs/architecture.md`. Este archivo manda sobre cualquier preferencia del agente.
 
+## Estado y cómo continuar
+- **Leer primero `docs/private/HANDOFF.md`**: estado real, decisiones que cambiaron vs. el spec,
+  acciones manuales pendientes, gotchas y orden de trabajo con reglas de corte.
+- Bloques Flutter pendientes: prompts F1–F11 en `docs/ai/prompts/flutter-blocks.md` (ejecutar en orden).
+- Contrato del backend (ya implementado y testeado, no rediseñar): `docs/api.md`.
+- Arquitectura: `docs/architecture.md`. ADRs en `docs/adr/` (pendientes, formato en HANDOFF §6).
+- Deadline: lunes 5 oct 2026, 22h00 (entrega 23h00). Ante la duda, priorizar funcionalidad P0 sobre pulido.
+
+## Tooling de agente (versionado)
+- `.mcp.json`: Dart & Flutter MCP server (`fvm dart mcp-server`) para agentic hot reload: con
+  `fvm flutter run` vivo, usar `dtd` → `get_runtime_errors` → `widget_inspector` → editar → `hot_reload`.
+- `.claude/settings.json`: permisos pre-aprobados, lectura de secretos denegada, `firebase deploy` bloqueado
+  (lo hace el humano), y hook que formatea cada `.dart` editado (`tool/hooks/format_dart.js`).
+
 ## Comandos
 - SIEMPRE `fvm flutter …` / `fvm dart …` (Flutter 3.47.4 vía `.fvmrc`). Nunca binarios globales.
 - Dependencias (raíz, pub workspace): `fvm dart pub get`
