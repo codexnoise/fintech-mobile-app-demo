@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "screen": "home",
+  "segment": "entrepreneur",
+  "version": "2026-10-04.1",
+  "ttlSeconds": 300,
+  "components": [
+    { "id": "greeting", "type": "greeting_header", "props": { "title": "Hola, {{firstName}}", "subtitle": "Así va tu negocio hoy" } },
+    { "id": "balance", "type": "balance_summary", "props": { "source": "accounts", "showAccounts": true } },
+    { "id": "actions", "type": "quick_actions", "props": { "actions": [
+      { "label": "Transferir", "icon": "swap_horiz", "action": { "type": "navigate", "route": "/transfers/new" } },
+      { "label": "Flujo de caja", "icon": "insights", "action": { "type": "open_assistant", "promptId": "spending_breakdown" } },
+      { "label": "Seguro de viaje", "icon": "flight", "action": { "type": "open_micro_app", "appId": "travel_insurance" } }
+    ] } },
+    { "id": "insight", "type": "insight_card", "props": { "title": "Flujo del mes", "text": "Este mes tus egresos fueron {{spent}}. {{insight}}" } },
+    { "id": "promo-credit", "type": "promo_banner", "props": {
+      "title": "Capital de trabajo",
+      "body": "Simula un crédito para tu negocio con tasa preferencial.",
+      "cta": "Ver opciones",
+      "tone": "neutral",
+      "action": { "type": "open_assistant", "promptId": "savings_tips" } } }
+  ]
+}

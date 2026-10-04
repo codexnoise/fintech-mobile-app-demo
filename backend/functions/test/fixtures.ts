@@ -1,0 +1,1 @@
+export const NOW = new Date('2026-10-04T15:00:00.000Z');
