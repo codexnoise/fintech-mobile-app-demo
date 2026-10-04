@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+
+<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "inverse-on-surface": "#eef0ff", "surface-container": "#eaedff", "on-background": "#131b2e", "on-primary-container": "#a3faef", "on-tertiary": "#ffffff", "surface-tint": "#006a63", "surface-bright": "#faf8ff", "outline": "#6e7977", "on-secondary-fixed": "#121e1c", "error": "#ba1a1a", "background": "#faf8ff", "surface": "#faf8ff", "error-container": "#ffdad6", "on-secondary-container": "#5b6765", "primary-fixed": "#9cf2e8", "surface-container-high": "#e2e7ff", "secondary-fixed": "#d8e5e2", "secondary-fixed-dim": "#bcc9c6", "tertiary-fixed-dim": "#ffb598", "on-primary-fixed-variant": "#00504a", "surface-variant": "#dae2fd", "inverse-surface": "#283044", "on-error": "#ffffff", "on-secondary": "#ffffff", "surface-container-lowest": "#ffffff", "on-primary-fixed": "#00201d", "tertiary-fixed": "#ffdbce", "on-tertiary-container": "#ffe5db", "primary-fixed-dim": "#80d5cb", "surface-dim": "#d2d9f4", "on-error-container": "#93000a", "inverse-primary": "#80d5cb", "tertiary": "#7f4025", "outline-variant": "#bdc9c6", "primary": "#005c55", "primary-container": "#0f766e", "on-primary": "#ffffff", "secondary-container": "#d8e5e2", "on-surface-variant": "#3e4947", "surface-container-highest": "#dae2fd", "on-tertiary-fixed": "#370e00", "tertiary-container": "#9c573a", "secondary": "#55615f", "on-surface": "#131b2e", "on-tertiary-fixed-variant": "#72361b", "surface-container-low": "#f2f3ff", "on-secondary-fixed-variant": "#3d4947" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "margin-sm": "1rem", "space-xs": "0.25rem", "margin": "1.25rem", "space-xl": "2rem", "space-md": "1rem", "gutter-sm": "0.75rem", "space-lg": "1.5rem", "gutter": "1rem", "space-sm": "0.5rem" }, fontFamily: { "headline-lg": ["Inter"], "headline-sm": ["Inter"], "body-md": ["Inter"], "label-sm": ["Inter"], "display-currency-mobile": ["Inter"], "body-sm": ["Inter"], "headline-md": ["Inter"], "display-currency": ["Inter"], "body-lg": ["Inter"], "label-md": ["Inter"] }, fontSize: { "headline-lg": ["24px", { lineHeight: "30px", letterSpacing: "-0.02em", fontWeight: "700" }], "headline-sm": ["16px", { lineHeight: "22px", letterSpacing: "-0.01em", fontWeight: "600" }], "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }], "label-sm": ["11px", { lineHeight: "14px", letterSpacing: "0.03em", fontWeight: "600" }], "display-currency-mobile": ["32px", { lineHeight: "36px", letterSpacing: "-0.03em", fontWeight: "700" }], "body-sm": ["13px", { lineHeight: "18px", fontWeight: "400" }], "headline-md": ["20px", { lineHeight: "26px", letterSpacing: "-0.015em", fontWeight: "600" }], "display-currency": ["36px", { lineHeight: "40px", letterSpacing: "-0.03em", fontWeight: "700" }], "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }], "label-md": ["13px", { lineHeight: "16px", letterSpacing: "0.01em", fontWeight: "600" }] } } } };</script></head><body class="bg-surface font-body-md text-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 pt-safe bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 px-margin flex items-center justify-between"><div class="flex items-center gap-space-sm"><img alt="Nexo Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1XAG86PUy4OQOkpVCNgPSpXek3j21h9n90ED8_3pHYPolSAYKpb5s0FdO5drNXi9hTCHO1kl_1XBf-CevwTdzWA7hcvVOz_7c9_0husY92TfVbc343HQ_pSb-7TL81cDQy4-tsaSxnE3qscVS92fx2gFIQGRj7rXoqlJ1uuqhRRupaevzGUf8oClcT9TiSuUc8zEQF3ns__lXT5XS106n0bz53PfgCG9U9YBvyx4buSy_CYMIC8gQtJ-DbB"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-primary leading-none">Nexo</span><span class="font-label-sm text-label-sm text-secondary leading-tight mt-0.5">Transferir</span></div></div><div class="flex items-center gap-space-xs"><button aria-label="Notificaciones" class="w-11 h-11 relative flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors text-on-surface-variant"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-error ring-2 ring-surface-container-lowest"></span></button><button aria-label="Perfil de usuario" class="w-11 h-11 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmc5IDf5cI5JtpLUcFhKHboHzyYBwr103tx9rHIDKiuzrNGIJppomU4N906RxBEhYlpHDiDWiu1e75vYGBNXuAkDKGsdUXD-ZH4aalI9UwX3FQndLayZbPxZV6sVspd4u-wwYqRjGEYTnthThoYxgljFAREq1fpRRuu_TJ1q_RKpqpTnjVrvbrDmjsbWNbIJd4Xh7u0jte20kYmZUJdo6-fqIDBEjtCWUpxKXpGlyFKjiAlvWTy3EZKA"/></button></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 pb-24 bg-surface"><div class="flex flex-col w-full px-margin pb-6 max-w-lg mx-auto">
+<!-- Interactive State Engine Containers -->
+<div class="flex flex-col w-full" id="transfer-flow-container">
+<!-- Step Header Context -->
+<div class="flex items-center justify-between pt-2 pb-4">
+<div class="flex items-center gap-space-xs">
+<button aria-label="Atrás" class="w-10 h-10 -ml-2 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-[22px]">arrow_back</span>
+</button>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface leading-tight">Entre cuentas propias</h2>
+<p class="font-label-sm text-label-sm text-secondary">Inmediata y sin costo adicional</p>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-surface-container-high font-label-sm text-label-sm text-primary font-semibold">SPI 24/7</span>
+</div>
+<!-- Account Selection Pair Card with Dynamic Swap Button -->
+<div class="relative flex flex-col gap-2 my-2">
+<!-- Cuenta Origen -->
+<div class="p-space-md rounded-2xl bg-surface-container-lowest shadow-sm hover:shadow transition-shadow" id="origin-card">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary">Cuenta de origen</span>
+<span class="flex items-center gap-1 font-label-sm text-label-sm text-primary font-medium">
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+            Activa
+          </span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-11 h-11 rounded-xl bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">account_balance_wallet</span>
+</div>
+<div>
+<p class="font-headline-sm text-headline-sm text-on-surface" id="origin-title">Cuenta Nómina</p>
+<p class="font-body-sm text-body-sm text-secondary" id="origin-number">•••• 4821</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-headline-sm text-headline-sm text-on-surface" id="origin-balance">$3,428.50</p>
+<p class="font-label-sm text-label-sm text-secondary">Disponible</p>
+</div>
+</div>
+</div>
+<!-- Swap Trigger Overlay Button -->
+<div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+<button aria-label="Intercambiar cuentas" class="w-10 h-10 rounded-full bg-primary-container text-on-primary shadow-md flex items-center justify-center hover:bg-primary active:scale-90 transition-transform" id="btn-swap-accounts" type="button">
+<span class="material-symbols-outlined text-[20px]">swap_vert</span>
+</button>
+</div>
+<!-- Cuenta Destino -->
+<div class="p-space-md rounded-2xl bg-surface-container-lowest shadow-sm hover:shadow transition-shadow" id="destination-card">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary">Cuenta de destino</span>
+<span class="flex items-center gap-1 font-label-sm text-label-sm text-tertiary font-medium">
+<span class="material-symbols-outlined text-[15px]">savings</span>
+            Meta activa
+          </span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-11 h-11 rounded-xl bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined text-[24px]">savings</span>
+</div>
+<div>
+<p class="font-headline-sm text-headline-sm text-on-surface" id="dest-title">Ahorro Meta Galápagos</p>
+<p class="font-body-sm text-body-sm text-secondary" id="dest-number">•••• 9104</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-headline-sm text-headline-sm text-on-surface" id="dest-balance">$1,200.00</p>
+<p class="font-label-sm text-label-sm text-secondary">Saldo actual</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Amount Configuration Bento Section -->
+<div class="mt-3 p-space-lg rounded-2xl bg-surface-container-lowest shadow-sm flex flex-col items-center">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary mb-3">Monto a transferir</span>
+<!-- Input Field Display -->
+<div class="flex items-baseline justify-center gap-1 mb-4">
+<span class="font-display-currency-mobile text-display-currency-mobile text-primary font-bold">$</span>
+<input class="w-48 font-display-currency-mobile text-display-currency-mobile text-on-surface text-center bg-transparent focus:outline-none tracking-tight font-bold selection:bg-primary-fixed" id="transfer-amount" step="0.01" type="number" value="500.00"/>
+<span class="font-label-md text-label-md text-secondary ml-1 font-semibold">USD</span>
+</div>
+<!-- Quick Add Pills -->
+<div class="grid grid-cols-4 gap-2 w-full pt-1">
+<button class="chip-amount py-2 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface font-label-md text-label-md font-semibold transition-colors text-center active:scale-95" data-val="50" type="button">+$50</button>
+<button class="chip-amount py-2 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface font-label-md text-label-md font-semibold transition-colors text-center active:scale-95" data-val="100" type="button">+$100</button>
+<button class="chip-amount py-2 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface font-label-md text-label-md font-semibold transition-colors text-center active:scale-95" data-val="200" type="button">+$200</button>
+<button class="py-2 rounded-xl bg-primary-fixed text-on-primary-fixed-variant font-label-md text-label-md font-semibold transition-colors text-center active:scale-95" id="chip-all" type="button">Todo</button>
+</div>
+</div>
+<!-- Concept Card -->
+<div class="mt-3 p-space-md rounded-2xl bg-surface-container-lowest shadow-sm flex flex-col gap-2">
+<label class="font-label-sm text-label-sm text-secondary font-medium" for="transfer-concept">Concepto o detalle (opcional)</label>
+<div class="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-surface-container-low">
+<span class="material-symbols-outlined text-[20px] text-secondary">edit_note</span>
+<input class="w-full bg-transparent font-body-md text-body-md text-on-surface focus:outline-none" id="transfer-concept" placeholder="¿Cuál es el motivo?" type="text" value="Ahorro programado de quincena"/>
+</div>
+</div>
+<!-- Primary Action to Open Bottom Sheet Modal -->
+<div class="mt-5 mb-2">
+<button class="w-full h-13 py-3.5 rounded-2xl bg-primary-container text-on-primary font-headline-sm text-headline-sm flex items-center justify-center gap-2 shadow-lg shadow-primary-container/20 active:scale-[0.99] hover:bg-primary transition-all" id="btn-open-confirm" type="button">
+<span>Revisar transferencia</span>
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Bottom Sheet Confirmation Drawer Modal (Hidden by Default) -->
+<div class="fixed inset-0 z-50 bg-inverse-surface/40 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300" id="modal-scrim">
+<div class="absolute bottom-0 inset-x-0 w-full max-w-lg mx-auto bg-surface-container-lowest rounded-t-3xl shadow-2xl p-space-lg transform translate-y-full transition-transform duration-300 ease-out flex flex-col gap-4 pb-safe" id="modal-sheet">
+<!-- Drag handle micro-affordance -->
+<div class="w-12 h-1.5 rounded-full bg-outline-variant/60 mx-auto -mt-2 mb-1"></div>
+<div class="flex items-start justify-between">
+<div>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-bold">Verificación final</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Confirmar transferencia</h3>
+</div>
+<button aria-label="Cerrar modal" class="w-9 h-9 rounded-full flex items-center justify-center text-secondary hover:bg-surface-container" id="btn-close-modal" type="button">
+<span class="material-symbols-outlined text-[22px]">close</span>
+</button>
+</div>
+<!-- Financial Recapitulation Card -->
+<div class="rounded-2xl bg-surface-container-low p-space-md flex flex-col gap-3">
+<div class="flex justify-between items-center pb-2">
+<span class="font-body-sm text-body-sm text-secondary">Monto a debitar</span>
+<span class="font-headline-md text-headline-md text-on-surface font-bold" id="confirm-monto">$500.00 USD</span>
+</div>
+<div class="flex items-center gap-3 py-2 px-3 rounded-xl bg-surface-container-lowest">
+<span class="material-symbols-outlined text-primary text-[22px]">arrow_downward_alt</span>
+<div class="flex flex-col text-left">
+<span class="font-label-sm text-label-sm text-secondary">Origen / Destino</span>
+<span class="font-headline-sm text-headline-sm text-on-surface" id="confirm-route">Cta. Nómina → Ahorro Galápagos</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-2 pt-1 font-body-sm text-body-sm">
+<div class="flex flex-col">
+<span class="text-secondary text-label-sm">Comisión del canal</span>
+<span class="text-primary font-semibold">$0.00 (Gratis)</span>
+</div>
+<div class="flex flex-col text-right">
+<span class="text-secondary text-label-sm">Tiempo de acreditación</span>
+<span class="text-on-surface font-semibold">Inmediata (SPI)</span>
+</div>
+</div>
+<div class="pt-2">
+<span class="text-secondary text-label-sm">Concepto</span>
+<p class="text-on-surface font-body-sm italic" id="confirm-concept-text">Ahorro programado de quincena</p>
+</div>
+</div>
+<!-- Confirmation CTA Button with Micro-State Flow -->
+<button class="w-full h-14 rounded-2xl bg-primary-container text-on-primary font-headline-sm text-headline-sm flex items-center justify-center gap-2 shadow-lg shadow-primary-container/25 active:scale-95 hover:bg-primary transition-all" id="btn-execute-transfer" type="button">
+<span class="material-symbols-outlined text-[22px]">lock</span>
+<span id="btn-execute-text">Confirmar y transferir $500.00</span>
+</button>
+<p class="text-center font-label-sm text-label-sm text-secondary">Protegido con biometría bancaria Nexo Shield</p>
+</div>
+</div>
+<!-- Success Receipt State (Hidden by Default) -->
+<div class="hidden flex-col items-center w-full py-4 text-center animate-fade-in" id="success-state-container">
+<!-- Success Celebration Icon Box -->
+<div class="w-20 h-20 rounded-full bg-primary-fixed flex items-center justify-center text-primary mb-4 shadow-lg shadow-primary/10">
+<span class="material-symbols-outlined text-[44px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<span class="px-3 py-1 rounded-full bg-surface-container font-label-sm text-label-sm text-primary font-semibold mb-2">Comprobante #NX-948201</span>
+<h3 class="font-headline-lg text-headline-lg text-on-surface mb-1">¡Transferencia exitosa!</h3>
+<p class="font-body-md text-body-md text-secondary max-w-xs mb-6">Tu dinero ya fue acreditado a tu meta de ahorro en tiempo real.</p>
+<!-- Detailed Voucher Card -->
+<div class="w-full rounded-2xl bg-surface-container-lowest p-space-lg shadow-sm text-left flex flex-col gap-3 mb-6">
+<div class="flex items-center justify-between pb-3">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Monto total</span>
+<span class="font-headline-lg text-headline-lg text-primary font-bold" id="success-voucher-amount">$500.00 USD</span>
+</div>
+<div class="flex justify-between items-center py-2">
+<span class="font-body-sm text-body-sm text-secondary">Cuenta origen</span>
+<span class="font-body-md text-body-md text-on-surface font-medium">Cuenta Nómina (•••• 4821)</span>
+</div>
+<div class="flex justify-between items-center py-2">
+<span class="font-body-sm text-body-sm text-secondary">Cuenta destino</span>
+<span class="font-body-md text-body-md text-on-surface font-medium">Ahorro Galápagos (•••• 9104)</span>
+</div>
+<div class="flex justify-between items-center py-2">
+<span class="font-body-sm text-body-sm text-secondary">Fecha y hora</span>
+<span class="font-body-sm text-body-sm text-on-surface" id="voucher-timestamp">17 Oct 2024, 15:42</span>
+</div>
+<div class="flex justify-between items-center pt-2">
+<span class="font-body-sm text-body-sm text-secondary">Concepto</span>
+<span class="font-body-sm text-body-sm text-on-surface truncate max-w-[180px]" id="voucher-concept">Ahorro quincena</span>
+</div>
+</div>
+<!-- Success Flow CTAs -->
+<div class="flex flex-col gap-3 w-full">
+<button class="w-full h-13 py-3.5 rounded-2xl bg-surface-container-high hover:bg-surface-container text-primary font-headline-sm text-headline-sm flex items-center justify-center gap-2 active:scale-95 transition-all" id="btn-share-receipt" type="button">
+<span class="material-symbols-outlined text-[20px]">share</span>
+<span>Compartir comprobante</span>
+</button>
+<button class="w-full h-13 py-3.5 rounded-2xl bg-primary-container text-on-primary font-headline-sm text-headline-sm flex items-center justify-center gap-2 shadow-md hover:bg-primary active:scale-95 transition-all" id="btn-reset-flow" type="button">
+<span class="material-symbols-outlined text-[20px]">home</span>
+<span>Volver al inicio</span>
+</button>
+</div>
+</div>
+</div>
+<script>
+  (function() {
+    // DOM Elements
+    const amountInput = document.getElementById('transfer-amount');
+    const conceptInput = document.getElementById('transfer-concept');
+    const swapBtn = document.getElementById('btn-swap-accounts');
+    const chipButtons = document.querySelectorAll('.chip-amount');
+    const chipAll = document.getElementById('chip-all');
+    
+    // Modal Elements
+    const modalScrim = document.getElementById('modal-scrim');
+    const modalSheet = document.getElementById('modal-sheet');
+    const openModalBtn = document.getElementById('btn-open-confirm');
+    const closeModalBtn = document.getElementById('btn-close-modal');
+    const executeTransferBtn = document.getElementById('btn-execute-transfer');
+    const executeText = document.getElementById('btn-execute-text');
+    
+    // Text labels for dynamic substitution
+    const confirmMonto = document.getElementById('confirm-monto');
+    const confirmRoute = document.getElementById('confirm-route');
+    const confirmConcept = document.getElementById('confirm-concept-text');
+    
+    // State Containers
+    const formContainer = document.getElementById('transfer-flow-container');
+    const successContainer = document.getElementById('success-state-container');
+    const successVoucherAmount = document.getElementById('success-voucher-amount');
+    const voucherTimestamp = document.getElementById('voucher-timestamp');
+    const voucherConcept = document.getElementById('voucher-concept');
+    const resetBtn = document.getElementById('btn-reset-flow');
+    const shareBtn = document.getElementById('btn-share-receipt');
+
+    // Account state variables
+    let isSwapped = false;
+    const originCardTitle = document.getElementById('origin-title');
+    const originCardNumber = document.getElementById('origin-number');
+    const originCardBalance = document.getElementById('origin-balance');
+    const destCardTitle = document.getElementById('dest-title');
+    const destCardNumber = document.getElementById('dest-number');
+    const destCardBalance = document.getElementById('dest-balance');
+
+    // Swap Accounts Interactive Logic
+    swapBtn.addEventListener('click', () => {
+      isSwapped = !isSwapped;
+      const tempTitle = originCardTitle.innerText;
+      const tempNum = originCardNumber.innerText;
+      const tempBal = originCardBalance.innerText;
+
+      originCardTitle.innerText = destCardTitle.innerText;
+      originCardNumber.innerText = destCardNumber.innerText;
+      originCardBalance.innerText = destCardBalance.innerText;
+
+      destCardTitle.innerText = tempTitle;
+      destCardNumber.innerText = tempNum;
+      destCardBalance.innerText = tempBal;
+
+      // Micro animation bounce on button
+      swapBtn.classList.add('rotate-180');
+      setTimeout(() => swapBtn.classList.remove('rotate-180'), 300);
+    });
+
+    // Quick Amount Chips Handlers
+    chipButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const addVal = parseFloat(btn.dataset.val || '0');
+        const currentVal = parseFloat(amountInput.value) || 0;
+        amountInput.value = (currentVal + addVal).toFixed(2);
+      });
+    });
+
+    chipAll.addEventListener('click', () => {
+      const balanceClean = originCardBalance.innerText.replace('$', '').replace(',', '');
+      amountInput.value = parseFloat(balanceClean).toFixed(2);
+    });
+
+    // Open Bottom Sheet Modal
+    function openModal() {
+      const val = parseFloat(amountInput.value) || 0;
+      const formattedAmount = '$' + val.toFixed(2) + ' USD';
+      confirmMonto.innerText = formattedAmount;
+      executeText.innerText = 'Confirmar y transferir $' + val.toFixed(2);
+      confirmConcept.innerText = conceptInput.value.trim() || 'Sin concepto detallado';
+      confirmRoute.innerText = `${originCardTitle.innerText} → ${destCardTitle.innerText}`;
+
+      modalScrim.classList.remove('opacity-0', 'pointer-events-none');
+      modalScrim.classList.add('opacity-100');
+      modalSheet.classList.remove('translate-y-full');
+      modalSheet.classList.add('translate-y-0');
+    }
+
+    function closeModal() {
+      modalScrim.classList.remove('opacity-100');
+      modalScrim.classList.add('opacity-0', 'pointer-events-none');
+      modalSheet.classList.remove('translate-y-0');
+      modalSheet.classList.add('translate-y-full');
+    }
+
+    openModalBtn.addEventListener('click', openModal);
+    closeModalBtn.addEventListener('click', closeModal);
+    modalScrim.addEventListener('click', (e) => {
+      if (e.target === modalScrim) closeModal();
+    });
+
+    // Execute Transfer Flow with Simulated Network Latency
+    executeTransferBtn.addEventListener('click', () => {
+      executeTransferBtn.disabled = true;
+      executeText.innerText = 'Procesando operación segura...';
+      
+      setTimeout(() => {
+        closeModal();
+        // Switch to Success receipt view
+        formContainer.classList.add('hidden');
+        successContainer.classList.remove('hidden');
+        successContainer.classList.add('flex');
+
+        const val = parseFloat(amountInput.value) || 0;
+        successVoucherAmount.innerText = '$' + val.toFixed(2) + ' USD';
+        voucherConcept.innerText = conceptInput.value.trim() || 'Sin concepto';
+        
+        // Dynamic localized date
+        const now = new Date();
+        voucherTimestamp.innerText = now.toLocaleDateString('es-EC', { 
+          day: '2-digit', 
+          month: 'short', 
+          year: 'numeric' 
+        }) + ', ' + now.toLocaleTimeString('es-EC', { 
+          hour: '2-digit', 
+          minute: '2-digit' 
+        });
+
+        executeTransferBtn.disabled = false;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 750);
+    });
+
+    // Reset Flow handler
+    resetBtn.addEventListener('click', () => {
+      successContainer.classList.remove('flex');
+      successContainer.classList.add('hidden');
+      formContainer.classList.remove('hidden');
+      amountInput.value = '500.00';
+    });
+
+    // Share Feedback Microinteraction
+    shareBtn.addEventListener('click', () => {
+      const origText = shareBtn.innerHTML;
+      shareBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]">check</span><span>Comprobante copiado</span>';
+      setTimeout(() => {
+        shareBtn.innerHTML = origText;
+      }, 1800);
+    });
+  })();
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-container-lowest/95 backdrop-blur-xl shadow-[0_-1px_12px_rgba(0,0,0,0.04)]" data-active-classes="text-primary font-semibold"><div class="flex justify-between items-center h-16 px-space-xs max-w-lg mx-auto"><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] py-1 text-secondary hover:text-on-surface transition-colors" data-path="inicio" href="#"><span class="material-symbols-outlined text-[24px]">home</span><span class="font-label-sm text-label-sm mt-0.5">Inicio</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] py-1 text-secondary hover:text-on-surface transition-colors" data-path="movimientos" href="#"><span class="material-symbols-outlined text-[24px]">receipt_long</span><span class="font-label-sm text-label-sm mt-0.5">Movimientos</span></a><div class="relative -top-4 flex items-center justify-center"><a aria-current="page" aria-label="Transferir dinero" class="w-14 h-14 rounded-full bg-primary-container shadow-lg shadow-primary-container/30 flex items-center justify-center hover:bg-primary transition-transform active:scale-95 text-primary font-semibold" data-path="transferir" href="#"><span class="material-symbols-outlined text-[28px]">swap_horiz</span></a></div><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] py-1 text-secondary hover:text-on-surface transition-colors" data-path="servicios" href="#"><span class="material-symbols-outlined text-[24px]">grid_view</span><span class="font-label-sm text-label-sm mt-0.5">Servicios</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] py-1 text-secondary hover:text-on-surface transition-colors" data-path="perfil" href="#"><span class="material-symbols-outlined text-[24px]">person</span><span class="font-label-sm text-label-sm mt-0.5">Perfil</span></a></div></nav></body></html>
