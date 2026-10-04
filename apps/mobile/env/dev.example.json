@@ -1,5 +1,6 @@
 {
   "APP_ENV": "dev",
   "USE_EMULATORS": true,
-  "API_BASE_URL": "http://10.0.2.2:5001/nexo-fintech-demo/us-east1/api"
+  "API_BASE_URL": "http://10.0.2.2:5001/nexo-fintech-demo/us-east1/api",
+  "APP_CHECK_DEBUG_TOKEN": ""
 }
