@@ -95,3 +95,23 @@ key.properties
 **/fastlane/screenshots
 **/fastlane/test_output
 **/fastlane/README.md
+
+# --- Nexo ---
+# Secrets / entornos locales (solo se versionan los *.example.json)
+env/*.json
+!env/*.example.json
+apps/mobile/env/*.json
+!apps/mobile/env/*.example.json
+.claude/settings.local.json
+# Backend
+backend/functions/node_modules/
+backend/functions/lib/
+backend/functions/coverage/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+.firebase/
+# Coverage de miembros del workspace
+**/coverage/
+# Notas privadas del candidato (spec/plan de trabajo), no se versionan
+docs/private/

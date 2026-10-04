@@ -1,4 +1,4 @@
-package io.giftpoint.fintech_mobile_app_demo
+package dev.codexnoise.nexo
 
 import io.flutter.embedding.android.FlutterActivity
 
