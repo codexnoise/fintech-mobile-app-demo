@@ -1,0 +1,5 @@
+{
+  "APP_ENV": "prod",
+  "USE_EMULATORS": false,
+  "API_BASE_URL": "https://us-east1-nexo-fintech-demo.cloudfunctions.net/api"
+}

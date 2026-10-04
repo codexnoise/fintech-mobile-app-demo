@@ -118,3 +118,7 @@ docs/private/
 backend/functions/.secret.local
 backend/functions/.env.*
 !backend/functions/.env.example
+
+# Entornos de la app: versionar solo *.example.json
+apps/mobile/env/*.json
+!apps/mobile/env/*.example.json
