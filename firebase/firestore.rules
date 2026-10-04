@@ -1,0 +1,44 @@
+rules_version = '2';
+
+// Nexo — Reglas de Firestore.
+// Principio: el cliente SOLO LEE sus propios datos. Toda escritura (dinero,
+// perfil, dispositivos, experiencias, flags) pasa por el BFF (Cloud Functions,
+// Admin SDK), donde se valida, se registra y se ejecuta en transacciones.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    match /users/{uid} {
+      allow get: if isOwner(uid);
+      allow list, write: if false;
+
+      match /accounts/{accountId} {
+        allow read: if isOwner(uid);
+        allow write: if false;
+
+        match /movements/{movementId} {
+          // Lecturas paginadas acotadas para evitar descargas masivas.
+          allow get: if isOwner(uid);
+          allow list: if isOwner(uid) && request.query.limit <= 100;
+          allow write: if false;
+        }
+      }
+
+      // Tokens FCM: solo backend.
+      match /devices/{deviceId} {
+        allow read, write: if false;
+      }
+    }
+
+    // Configuración SDUI, flags operativos e idempotencia: solo backend.
+    match /experiences/{id} { allow read, write: if false; }
+    match /ops/{id} { allow read, write: if false; }
+    match /idempotency/{id} { allow read, write: if false; }
+
+    // Deny-by-default para cualquier otra colección.
+    match /{document=**} { allow read, write: if false; }
+  }
+}
