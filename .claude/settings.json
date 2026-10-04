@@ -1,0 +1,44 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(fvm flutter test:*)",
+      "Bash(fvm flutter analyze:*)",
+      "Bash(fvm flutter pub add:*)",
+      "Bash(fvm flutter pub get:*)",
+      "Bash(fvm dart pub get:*)",
+      "Bash(fvm dart format:*)",
+      "Bash(fvm dart analyze:*)",
+      "Bash(make format)",
+      "Bash(make analyze)",
+      "Bash(make test)",
+      "Bash(npm test:*)",
+      "Bash(npm run typecheck:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "mcp__dart__dtd",
+      "mcp__dart__get_runtime_errors",
+      "mcp__dart__widget_inspector",
+      "mcp__dart__analyze_files",
+      "mcp__dart__hot_reload",
+      "mcp__dart__hot_restart"
+    ],
+    "deny": [
+      "Read(./backend/functions/.secret.local)",
+      "Read(./backend/functions/.env.*)",
+      "Read(./apps/mobile/env/dev.json)",
+      "Read(./apps/mobile/env/prod.json)",
+      "Bash(git push --force:*)",
+      "Bash(firebase deploy:*)"
+    ]
+  },
+  "enabledMcpjsonServers": ["dart"],
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [{ "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/tool/hooks/format_dart.js\"" }]
+      }
+    ]
+  }
+}
