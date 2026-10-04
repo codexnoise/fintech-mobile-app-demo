@@ -1,0 +1,82 @@
+name: CI
+
+# Trunk Based Development: cada push a main y cada PR corto pasan por aquí.
+# main debe estar SIEMPRE verde.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  flutter:
+    name: Flutter (format · analyze · test)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read Flutter version from .fvmrc
+        id: fvm
+        run: echo "version=$(jq -r .flutter .fvmrc)" >> "$GITHUB_OUTPUT"
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ steps.fvm.outputs.version }}
+          channel: stable
+          cache: true
+      - name: Resolve workspace
+        run: dart pub get
+      - name: Format
+        run: dart format --output=none --set-exit-if-changed apps packages
+      - name: Analyze
+        run: flutter analyze packages/core packages/design_system packages/sdui_engine apps/mobile
+      - name: Test with coverage
+        run: |
+          set -e
+          for m in packages/core packages/design_system packages/sdui_engine apps/mobile; do
+            echo "::group::$m"
+            (cd "$m" && flutter test --coverage)
+            echo "::endgroup::"
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: flutter-coverage
+          path: "**/coverage/lcov.info"
+          if-no-files-found: ignore
+
+  backend:
+    name: Backend (typecheck · test)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: backend/functions
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: backend/functions/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run coverage
+      - uses: actions/upload-artifact@v4
+        with:
+          name: backend-coverage
+          path: backend/functions/coverage
+          if-no-files-found: ignore
+
+  micro-apps:
+    name: Micro-apps (syntax)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node --check micro_apps/travel_insurance/public/app.js
