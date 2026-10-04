@@ -1,0 +1,21 @@
+name: nexo_sdui_engine
+description: "Motor Server-Driven UI: contrato, parser seguro, registry y acciones allowlisted."
+publish_to: none
+version: 0.1.0
+
+environment:
+  sdk: ^3.13.0
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  nexo_core:
+    path: ../core
+  nexo_design_system:
+    path: ../design_system
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
