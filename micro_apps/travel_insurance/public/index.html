@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="referrer" content="no-referrer" />
+    <title>Viaja Seguro · Cotizador</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="partner">
+      <span class="logo" aria-hidden="true">✈</span>
+      <div>
+        <p class="partner-name">Viaja Seguro</p>
+        <p class="partner-sub">Aliado de Nexo · micro-app</p>
+      </div>
+    </header>
+
+    <main>
+      <section id="status" class="card status" role="status" aria-live="polite">Conectando con Nexo…</section>
+
+      <form id="quote-form" class="card" novalidate hidden>
+        <h1>Cotiza tu seguro de viaje</h1>
+        <p class="muted" id="greeting"></p>
+
+        <label for="destination">Destino</label>
+        <select id="destination" required>
+          <option value="south_america">Sudamérica</option>
+          <option value="north_america">Norteamérica</option>
+          <option value="europe">Europa</option>
+          <option value="world">Resto del mundo</option>
+        </select>
+
+        <div class="row">
+          <div>
+            <label for="days">Días</label>
+            <input id="days" type="number" inputmode="numeric" min="1" max="60" value="7" required />
+          </div>
+          <div>
+            <label for="travelers">Viajeros</label>
+            <input id="travelers" type="number" inputmode="numeric" min="1" max="6" value="1" required />
+          </div>
+        </div>
+
+        <fieldset>
+          <legend>Plan</legend>
+          <label class="option"><input type="radio" name="plan" value="basic" checked /> Básico · gastos médicos USD 30.000</label>
+          <label class="option"><input type="radio" name="plan" value="plus" /> Plus · USD 100.000 + equipaje + cancelación</label>
+        </fieldset>
+
+        <div class="price" aria-live="polite">
+          <span class="muted">Total estimado</span>
+          <strong id="price">—</strong>
+          <span id="discount" class="badge" hidden>-10% cliente Premium</span>
+        </div>
+
+        <button type="submit" id="accept">Contratar</button>
+        <button type="button" id="close" class="secondary">Volver a Nexo</button>
+        <p class="legal">Cotización referencial de demostración. No constituye una póliza.</p>
+      </form>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
