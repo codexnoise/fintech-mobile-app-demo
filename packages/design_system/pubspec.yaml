@@ -1,0 +1,19 @@
+name: nexo_design_system
+description: "Tokens y componentes UI de Nexo (generados desde Google Stitch)."
+publish_to: none
+version: 0.1.0
+
+environment:
+  sdk: ^3.13.0
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  nexo_core:
+    path: ../core
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
