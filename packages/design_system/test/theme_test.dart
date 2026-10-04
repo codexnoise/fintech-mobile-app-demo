@@ -9,7 +9,9 @@ void main() {
     expect(theme.scaffoldBackgroundColor, NexoColors.background);
   });
 
-  testWidgets('el texto secundario cumple contraste AA sobre surface', (tester) async {
+  testWidgets('el texto secundario cumple contraste AA sobre surface', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: NexoTheme.light(),

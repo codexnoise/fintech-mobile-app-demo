@@ -40,8 +40,11 @@ final class ValidationFailure extends Failure {
 /// Servicio degradado o en mantenimiento (HTTP 503, circuit breaker abierto
 /// o kill switch de operaciones).
 final class ServiceUnavailableFailure extends Failure {
-  const ServiceUnavailableFailure({this.service, this.retryAfter, String? message})
-    : super(message);
+  const ServiceUnavailableFailure({
+    this.service,
+    this.retryAfter,
+    String? message,
+  }) : super(message);
 
   final String? service;
   final Duration? retryAfter;
@@ -52,7 +55,8 @@ final class ServiceUnavailableFailure extends Failure {
 
 /// Error inesperado del servidor.
 final class ServerFailure extends Failure {
-  const ServerFailure({this.code, this.requestId, String? message}) : super(message);
+  const ServerFailure({this.code, this.requestId, String? message})
+    : super(message);
 
   final String? code;
 
