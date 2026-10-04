@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "screen": "home",
+  "segment": "premium",
+  "version": "2026-10-04.1",
+  "ttlSeconds": 300,
+  "components": [
+    { "id": "greeting", "type": "greeting_header", "props": { "title": "Buenas, {{firstName}}", "subtitle": "Tu patrimonio de un vistazo" } },
+    { "id": "balance", "type": "balance_summary", "props": { "source": "accounts", "showAccounts": true, "emphasis": "total" } },
+    { "id": "promo-invest", "type": "promo_banner", "props": {
+      "title": "Inversiones a plazo",
+      "body": "Haz crecer tu ahorro de {{saved}} este mes con una inversión a plazo fijo.",
+      "cta": "Conocer más",
+      "tone": "premium",
+      "action": { "type": "open_assistant", "promptId": "savings_tips" } } },
+    { "id": "actions", "type": "quick_actions", "props": { "actions": [
+      { "label": "Transferir", "icon": "swap_horiz", "action": { "type": "navigate", "route": "/transfers/new" } },
+      { "label": "Asesor IA", "icon": "auto_awesome", "action": { "type": "open_assistant", "promptId": "monthly_summary" } },
+      { "label": "Seguro de viaje", "icon": "flight", "action": { "type": "open_micro_app", "appId": "travel_insurance" } }
+    ] } },
+    { "id": "travel", "type": "micro_app_tile", "props": {
+      "title": "Seguro de viaje Premium",
+      "body": "Cobertura internacional para ti y tu familia.",
+      "action": { "type": "open_micro_app", "appId": "travel_insurance" } } },
+    { "id": "insight", "type": "insight_card", "props": { "title": "Resumen", "text": "{{insight}}" } }
+  ]
+}
