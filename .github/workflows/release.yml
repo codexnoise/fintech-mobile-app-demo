@@ -32,6 +32,7 @@ jobs:
         working-directory: apps/mobile
         run: |
           flutter build apk --release -t lib/main_prod.dart \
+            --dart-define-from-file=env/prod.example.json \
             --obfuscate --split-debug-info=build/symbols \
             --build-name=${GITHUB_REF_NAME#v}
       - uses: softprops/action-gh-release@v2
