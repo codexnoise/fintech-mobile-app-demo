@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "io.giftpoint.fintech_mobile_app_demo"
+    namespace = "dev.codexnoise.nexo"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -16,7 +16,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "io.giftpoint.fintech_mobile_app_demo"
+        applicationId = "dev.codexnoise.nexo"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion

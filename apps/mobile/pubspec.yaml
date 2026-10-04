@@ -1,0 +1,28 @@
+name: nexo_mobile
+description: "Nexo — plataforma financiera digital (app shell)."
+publish_to: none
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.13.0
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  nexo_core:
+    path: ../../packages/core
+  nexo_design_system:
+    path: ../../packages/design_system
+  nexo_sdui_engine:
+    path: ../../packages/sdui_engine
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
