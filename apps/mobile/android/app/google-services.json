@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "655134347055",
+    "project_id": "nexo-fintech-demo",
+    "storage_bucket": "nexo-fintech-demo.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:655134347055:android:b66bdef5bab80c1408dbda",
+        "android_client_info": {
+          "package_name": "dev.codexnoise.nexo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPS75YW760iH121G44eNQ0BIkJlej7O-Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
