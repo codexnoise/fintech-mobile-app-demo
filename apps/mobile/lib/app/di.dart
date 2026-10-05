@@ -8,6 +8,8 @@ import 'package:go_router/go_router.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:nexo_core/nexo_core.dart';
 
+import '../features/accounts/data/firestore_accounts_repository.dart';
+import '../features/accounts/domain/accounts_repository.dart';
 import '../features/auth/data/firebase_auth_repository.dart';
 import '../features/auth/data/local_biometrics.dart';
 import '../features/auth/domain/auth_repository.dart';
@@ -16,6 +18,7 @@ import '../features/auth/domain/logout.dart';
 import '../features/onboarding/data/api_profile_repository.dart';
 import '../features/onboarding/domain/profile_repository.dart';
 import 'env.dart';
+import 'infra/firebase_current_user.dart';
 import 'infra/firebase_token_providers.dart';
 import 'infra/firestore_cleanup.dart';
 import 'router.dart';
@@ -34,6 +37,7 @@ void configureDependencies(AppEnv env) {
     authTokens: FirebaseAuthTokenProvider(auth),
     appCheckTokens: FirebaseAppCheckTokenProvider(FirebaseAppCheck.instance),
     authRepository: FirebaseAuthRepository(auth),
+    currentUser: FirebaseCurrentUser(auth),
     biometric: LocalAuthBiometricAuthenticator(LocalAuthentication()),
     biometricPrefs: SecureBiometricPreferences(
       SecureBiometricPreferences.createStorage(),
@@ -55,7 +59,9 @@ void registerAppDependencies(
   required AuthRepository authRepository,
   required BiometricAuthenticator biometric,
   required BiometricPreferences biometricPrefs,
+  required CurrentUserProvider currentUser,
   ProfileRepository? profileRepository,
+  AccountsRepository? accountsRepository,
   void Function(Object error) reportError = _debugReport,
 }) {
   di
@@ -83,6 +89,15 @@ void registerAppDependencies(
     ..registerLazySingleton<ProfileRepository>(
       () => profileRepository ?? ApiProfileRepository(di()),
     )
+    // accounts
+    ..registerSingleton<CurrentUserProvider>(currentUser)
+    ..registerLazySingleton<AccountsRepository>(
+      () =>
+          accountsRepository ??
+          FirestoreAccountsRepository(() => di<FirebaseFirestore>(), di()),
+    )
+    ..registerLazySingleton<AccountsSource>(() => di<AccountsRepository>())
+    ..registerLazySingleton<ConnectivityMonitor>(ConnectivityPlusMonitor.new)
     // sesión y navegación
     ..registerLazySingleton<SessionCubit>(
       () => SessionCubit(

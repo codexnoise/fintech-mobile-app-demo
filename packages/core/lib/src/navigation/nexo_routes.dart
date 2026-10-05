@@ -8,6 +8,7 @@ abstract final class NexoRoutes {
   static const biometricSetup = '/biometric-setup';
   static const lock = '/lock';
   static const home = '/home';
+  static const accounts = '/accounts';
   static const accountPattern = '/accounts/:id';
   static const transferNew = '/transfers/new';
   static const microAppPattern = '/micro-apps/:appId';
