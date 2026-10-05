@@ -17,6 +17,8 @@ import 'di.dart';
 import 'env.dart';
 import 'session/auto_lock.dart';
 import 'session/session_cubit.dart';
+import 'session/session_status.dart';
+import '../features/notifications/presentation/push_coordinator.dart';
 
 /// Punto de entrada común de `main_dev.dart` y `main_prod.dart`.
 Future<void> bootstrap(AppFlavor flavor) async {
@@ -36,8 +38,10 @@ Future<void> bootstrap(AppFlavor flavor) async {
 
       configureDependencies(env);
       final session = getIt<SessionCubit>()..start();
+      final router = getIt<GoRouter>();
       AutoLock(onLock: session.lock).attach();
-      runApp(NexoApp(router: getIt<GoRouter>(), session: session));
+      _wirePush(session, router);
+      runApp(NexoApp(router: router, session: session));
     },
     (error, stack) {
       if (Firebase.apps.isEmpty) {
@@ -48,6 +52,20 @@ Future<void> bootstrap(AppFlavor flavor) async {
       FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     },
   );
+}
+
+/// Push: el tap navega (si la app está bloqueada, el guard pasa por /lock y
+/// vuelve a la ruta) y el token se registra cuando hay sesión con perfil.
+void _wirePush(SessionCubit session, GoRouter router) {
+  final push = getIt<PushCoordinator>();
+  push.routes.listen(router.push);
+  void onStatus(SessionStatus status) {
+    if (status is SessionReady) unawaited(push.onSessionReady());
+  }
+
+  session.stream.listen(onStatus);
+  onStatus(session.state);
+  unawaited(push.start());
 }
 
 Future<void> _configureCrashlytics(AppEnv env) async {

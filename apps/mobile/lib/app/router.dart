@@ -23,6 +23,8 @@ import '../features/auth/presentation/register_cubit.dart';
 import '../features/auth/presentation/register_page.dart';
 import '../features/experience/presentation/home_cubit.dart';
 import '../features/experience/presentation/home_page.dart';
+import '../features/notifications/presentation/notification_opt_in.dart';
+import '../features/notifications/presentation/push_coordinator.dart';
 import '../features/onboarding/presentation/onboarding_cubit.dart';
 import '../features/transfers/presentation/transfer_cubit.dart';
 import '../features/transfers/presentation/transfer_page.dart';
@@ -120,6 +122,9 @@ GoRouter buildRouter({
             parser: di(),
             errorReporter: di(),
             onAction: dispatchSduiAction,
+            header: di.isRegistered<PushCoordinator>()
+                ? NotificationOptInCard(coordinator: di())
+                : null,
             slots: {
               'balance_summary': (_, component) => BalanceSummary(
                 showAccounts: component.props['showAccounts'] != false,

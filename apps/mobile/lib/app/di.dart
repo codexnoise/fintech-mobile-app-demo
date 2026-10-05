@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -18,6 +21,8 @@ import '../features/auth/domain/biometrics.dart';
 import '../features/auth/domain/logout.dart';
 import '../features/experience/data/cascading_experience_repository.dart';
 import '../features/experience/domain/experience.dart';
+import '../features/notifications/data/push_adapters.dart';
+import '../features/notifications/presentation/push_coordinator.dart';
 import '../features/onboarding/data/api_profile_repository.dart';
 import '../features/onboarding/domain/profile_repository.dart';
 import '../features/transfers/data/api_transfers_repository.dart';
@@ -51,9 +56,23 @@ void configureDependencies(AppEnv env) {
     ),
     errorReporter: CrashlyticsErrorReporter(FirebaseCrashlytics.instance),
   );
-  getIt<SessionCleanupRegistry>().register(
-    () => clearFirestoreCache(getIt<FirebaseFirestore>()),
+  getIt.registerLazySingleton<PushCoordinator>(
+    () => PushCoordinator(
+      messaging: FirebasePushMessaging(FirebaseMessaging.instance),
+      local: LocalNotificationsNotifier(FlutterLocalNotificationsPlugin()),
+      devices: ApiDevicesRepository(getIt()),
+      deviceIds: SecureDeviceIdStore(
+        SecureBiometricPreferences.createStorage(),
+      ),
+      platform: defaultTargetPlatform == TargetPlatform.iOS ? 'ios' : 'android',
+      appVersion: env.appVersion,
+      errorReporter: getIt(),
+    ),
   );
+  getIt<SessionCleanupRegistry>()
+    ..register(() => clearFirestoreCache(getIt<FirebaseFirestore>()))
+    // El dispositivo deja de recibir push del usuario que cerró sesión.
+    ..register(() => getIt<PushCoordinator>().onLogout());
 }
 
 /// Composición sin dependencias directas de Firebase; los tests la usan con
