@@ -21,6 +21,8 @@ import '../features/auth/presentation/login_page.dart';
 import '../features/auth/presentation/register_cubit.dart';
 import '../features/auth/presentation/register_page.dart';
 import '../features/onboarding/presentation/onboarding_cubit.dart';
+import '../features/transfers/presentation/transfer_cubit.dart';
+import '../features/transfers/presentation/transfer_page.dart';
 import '../features/onboarding/presentation/onboarding_page.dart';
 import 'env.dart';
 import 'placeholder_page.dart';
@@ -127,7 +129,18 @@ GoRouter buildRouter({
           child: const AccountDetailPage(),
         ),
       ),
-      page(NexoRoutes.transferNew, 'Nueva transferencia'),
+      GoRoute(
+        path: NexoRoutes.transferNew,
+        builder: (_, state) => BlocProvider(
+          create: (_) => TransferCubit(
+            di(),
+            di(),
+            di(),
+            initialFromId: state.uri.queryParameters['from'],
+          )..start(),
+          child: const TransferPage(),
+        ),
+      ),
       page(NexoRoutes.microAppPattern, 'Micro-app'),
       page(NexoRoutes.assistant, 'Asistente'),
       // Herramienta de demo: no existe en builds de producción.
