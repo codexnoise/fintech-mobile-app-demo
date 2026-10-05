@@ -33,7 +33,7 @@ minutos y de forma determinista, sin depender de servicios desplegados ni de un 
 - **CI** (`.github/workflows/ci.yml`): format, analyze y test con coverage de los cuatro miembros Flutter;
   typecheck y coverage del backend; chequeo de sintaxis de la micro-app.
 
-Volumen al cierre: 248 tests Flutter (core 56, design_system 13, sdui_engine 18, mobile 161) y 56 tests
+Volumen al cierre: 253 tests Flutter (core 59, design_system 13, sdui_engine 18, mobile 163) y 56 tests
 de backend. Detalle en [docs/testing.md](../testing.md).
 
 ## Trade-offs

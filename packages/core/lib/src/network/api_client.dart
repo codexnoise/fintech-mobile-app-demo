@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 
 import '../result.dart';
+import '../error_reporter.dart';
 import 'circuit_breaker.dart';
 import 'error_mapper.dart';
 import 'interceptors.dart';
@@ -21,6 +22,7 @@ final class ApiClient {
     HttpClientAdapter? adapter,
     Future<void> Function(Duration)? sleep,
     this.breaker,
+    this.errorReporter,
   }) : dio = Dio(
          BaseOptions(
            baseUrl: baseUrl,
@@ -45,6 +47,10 @@ final class ApiClient {
 
   /// Falla rápido si un servicio del BFF viene fallando (caída parcial).
   final CircuitBreaker? breaker;
+
+  /// Reporta como no fatales las fallas del BFF (5xx, contrato roto) con su
+  /// requestId. Red y negocio (4xx) son esperados y no se reportan.
+  final ErrorReporter? errorReporter;
 
   Future<Result<T>> get<T>(
     String path, {
@@ -107,6 +113,15 @@ final class ApiClient {
       );
     }
     final result = await _execute(request, decode);
+    if (result case Err(failure: final ServerFailure failure)
+        when _isServerFault(failure)) {
+      errorReporter?.report(
+        failure,
+        null,
+        reason: 'BFF $path ${failure.code}',
+        requestId: failure.requestId,
+      );
+    }
     if (breaker != null) {
       switch (result) {
         case Err(:final failure) when CircuitBreaker.countsAsFailure(failure):
@@ -117,6 +132,11 @@ final class ApiClient {
     }
     return result;
   }
+
+  static bool _isServerFault(ServerFailure f) =>
+      f.code == 'internal_error' ||
+      f.code == 'invalid_response' ||
+      (f.code?.startsWith('http_5') ?? false);
 
   Future<Result<T>> _execute<T>(
     Future<Response<Object?>> Function() request,

@@ -17,3 +17,4 @@ export 'src/connectivity.dart';
 export 'src/contracts/accounts.dart';
 export 'src/error_reporter.dart';
 export 'src/network/circuit_breaker.dart';
+export 'src/analytics.dart';

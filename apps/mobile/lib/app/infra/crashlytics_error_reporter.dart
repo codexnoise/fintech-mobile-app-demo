@@ -7,6 +7,14 @@ final class CrashlyticsErrorReporter implements ErrorReporter {
   final FirebaseCrashlytics _crashlytics;
 
   @override
-  void report(Object error, StackTrace? stack, {String? reason}) =>
-      _crashlytics.recordError(error, stack, reason: reason);
+  void report(
+    Object error,
+    StackTrace? stack, {
+    String? reason,
+    String? requestId,
+  }) {
+    // Custom key para buscar el mismo id en los logs del BFF.
+    if (requestId != null) _crashlytics.setCustomKey('request_id', requestId);
+    _crashlytics.recordError(error, stack, reason: reason);
+  }
 }

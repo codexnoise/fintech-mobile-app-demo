@@ -100,6 +100,7 @@ class TransferCubit extends Cubit<TransferState> {
     this._connectivity, {
     String Function()? newIdempotencyKey,
     this._initialFromId,
+    this._analytics = const NoopAnalytics(),
   }) : _newKey = newIdempotencyKey ?? const Uuid().v4,
        super(const TransferLoading());
 
@@ -107,6 +108,7 @@ class TransferCubit extends Cubit<TransferState> {
   final TransfersRepository _transfers;
   final ConnectivityMonitor _connectivity;
   final String Function() _newKey;
+  final AnalyticsTracker _analytics;
   final String? _initialFromId;
 
   StreamSubscription<Result<Live<List<Account>>>>? _accountsSub;
@@ -250,6 +252,9 @@ class TransferCubit extends Cubit<TransferState> {
     switch (result) {
       case Ok(:final value):
         _attemptKey = null;
+        _analytics.track(AnalyticsEvents.transferCompleted, {
+          'replayed': value.replayed,
+        });
         emit(TransferSucceeded(value, draft));
       case Err(failure: ServiceUnavailableFailure()):
         emit(TransferMaintenance(draft, online: _online));

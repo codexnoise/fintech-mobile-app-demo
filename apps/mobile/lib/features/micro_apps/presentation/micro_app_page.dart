@@ -15,12 +15,14 @@ class MicroAppPage extends StatefulWidget {
     required this.app,
     required this.fetchToken,
     required this.apiBase,
+    this.analytics = const NoopAnalytics(),
     super.key,
   });
 
   final MicroApp app;
   final Future<Result<String>> Function(String appId) fetchToken;
   final String apiBase;
+  final AnalyticsTracker analytics;
 
   @override
   State<MicroAppPage> createState() => _MicroAppPageState();
@@ -112,6 +114,10 @@ class _MicroAppPageState extends State<MicroAppPage> {
           contextScript(nonce: _nonce!, token: token, apiBase: widget.apiBase),
         );
       case BridgeQuoteAccepted():
+        widget.analytics.track(AnalyticsEvents.microAppQuoteAccepted, {
+          'app_id': widget.app.id,
+          'plan': message.plan,
+        });
         await _showQuote(message);
         if (mounted) Navigator.of(context).pop();
       case BridgeClose():

@@ -30,6 +30,7 @@ class HomeCubit extends Cubit<HomeState> {
     required this.segment,
     this.screen = 'home',
     DateTime Function()? now,
+    this._analytics = const NoopAnalytics(),
   }) : _now = now ?? DateTime.now,
        super(const HomeLoading());
 
@@ -37,6 +38,7 @@ class HomeCubit extends Cubit<HomeState> {
   final String segment;
   final String screen;
   final DateTime Function() _now;
+  final AnalyticsTracker _analytics;
 
   /// Momento de la última carga remota exitosa (reloj del cubit).
   DateTime? _remoteAt;
@@ -64,6 +66,14 @@ class HomeCubit extends Cubit<HomeState> {
     switch (result) {
       case Ok(:final value):
         _remoteAt = value.source == ExperienceSource.remote ? _now() : null;
+        if (value.source != ExperienceSource.remote) {
+          // Mide la tasa de fallback (SLO propuesto < 2 %).
+          _analytics.track(AnalyticsEvents.sduiFallbackUsed, {
+            'screen': screen,
+            'source': value.source.name,
+            'reason': value.remoteFailure?.runtimeType.toString() ?? 'unknown',
+          });
+        }
         emit(HomeLoaded(value));
       // Ya había algo en pantalla: mantenerlo.
       case Err() when current is HomeLoaded:
