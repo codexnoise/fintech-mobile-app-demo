@@ -23,6 +23,9 @@ import '../features/auth/presentation/register_cubit.dart';
 import '../features/auth/presentation/register_page.dart';
 import '../features/experience/presentation/home_cubit.dart';
 import '../features/experience/presentation/home_page.dart';
+import '../features/micro_apps/data/context_token.dart';
+import '../features/micro_apps/domain/micro_app.dart';
+import '../features/micro_apps/presentation/micro_app_page.dart';
 import '../features/notifications/presentation/notification_opt_in.dart';
 import '../features/notifications/presentation/push_coordinator.dart';
 import '../features/onboarding/presentation/onboarding_cubit.dart';
@@ -168,7 +171,22 @@ GoRouter buildRouter({
           child: const TransferPage(),
         ),
       ),
-      page(NexoRoutes.microAppPattern, 'Micro-app'),
+      GoRoute(
+        path: NexoRoutes.microAppPattern,
+        builder: (_, state) {
+          final app = microApps[state.pathParameters['appId']];
+          return app == null
+              ? PlaceholderPage(
+                  title: 'Servicio no disponible',
+                  location: state.uri,
+                )
+              : MicroAppPage(
+                  app: app,
+                  apiBase: env.apiBaseUrl,
+                  fetchToken: (appId) => fetchContextToken(di(), appId),
+                );
+        },
+      ),
       page(NexoRoutes.assistant, 'Asistente'),
       // Herramienta de demo: no existe en builds de producción.
       if (env.isDev) page(NexoRoutes.networkLab, 'Network Lab'),
