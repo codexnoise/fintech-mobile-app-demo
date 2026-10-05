@@ -2,11 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:nexo_core/nexo_core.dart';
+import 'package:nexo_sdui_engine/nexo_sdui_engine.dart';
 
 import '../features/accounts/data/firestore_accounts_repository.dart';
 import '../features/accounts/domain/accounts_repository.dart';
@@ -15,15 +16,19 @@ import '../features/auth/data/local_biometrics.dart';
 import '../features/auth/domain/auth_repository.dart';
 import '../features/auth/domain/biometrics.dart';
 import '../features/auth/domain/logout.dart';
+import '../features/experience/data/cascading_experience_repository.dart';
+import '../features/experience/domain/experience.dart';
 import '../features/onboarding/data/api_profile_repository.dart';
 import '../features/onboarding/domain/profile_repository.dart';
 import '../features/transfers/data/api_transfers_repository.dart';
 import '../features/transfers/domain/transfer.dart';
 import 'env.dart';
+import 'infra/crashlytics_error_reporter.dart';
 import 'infra/firebase_current_user.dart';
 import 'infra/firebase_token_providers.dart';
 import 'infra/firestore_cleanup.dart';
 import 'router.dart';
+import 'sdui_actions.dart';
 import 'session/session_cubit.dart';
 
 final getIt = GetIt.instance;
@@ -44,7 +49,7 @@ void configureDependencies(AppEnv env) {
     biometricPrefs: SecureBiometricPreferences(
       SecureBiometricPreferences.createStorage(),
     ),
-    reportError: (e) => FirebaseCrashlytics.instance.recordError(e, null),
+    errorReporter: CrashlyticsErrorReporter(FirebaseCrashlytics.instance),
   );
   getIt<SessionCleanupRegistry>().register(
     () => clearFirestoreCache(getIt<FirebaseFirestore>()),
@@ -64,10 +69,12 @@ void registerAppDependencies(
   required CurrentUserProvider currentUser,
   ProfileRepository? profileRepository,
   AccountsRepository? accountsRepository,
-  void Function(Object error) reportError = _debugReport,
+  ExperienceCache? experienceCache,
+  ErrorReporter errorReporter = const PrintErrorReporter(),
 }) {
   di
     ..registerSingleton<AppEnv>(env)
+    ..registerSingleton<ErrorReporter>(errorReporter)
     ..registerSingleton<AuthTokenProvider>(authTokens)
     ..registerSingleton<AppCheckTokenProvider>(appCheckTokens)
     ..registerSingleton<SessionCleanupRegistry>(SessionCleanupRegistry())
@@ -85,7 +92,12 @@ void registerAppDependencies(
     ..registerSingleton<BiometricAuthenticator>(biometric)
     ..registerSingleton<BiometricPreferences>(biometricPrefs)
     ..registerLazySingleton<LogoutUseCase>(
-      () => LogoutUseCase(di(), di(), di(), onCleanupError: reportError),
+      () => LogoutUseCase(
+        di(),
+        di(),
+        di(),
+        onCleanupError: (e) => errorReporter.report(e, null, reason: 'logout'),
+      ),
     )
     // onboarding
     ..registerLazySingleton<ProfileRepository>(
@@ -104,6 +116,31 @@ void registerAppDependencies(
     ..registerLazySingleton<TransfersRepository>(
       () => ApiTransfersRepository(di()),
     )
+    // experience (SDUI)
+    ..registerLazySingleton<SduiParser>(
+      () => SduiParser(
+        supportedTypes: SduiRegistry.standardTypes,
+        allowedRoutes: sduiAllowedRoutes,
+        allowedMicroApps: sduiAllowedMicroApps,
+      ),
+    )
+    ..registerLazySingleton<SduiRegistry>(SduiRegistry.standard)
+    ..registerLazySingleton<ExperienceCache>(
+      () => experienceCache ?? SharedPrefsExperienceCache(),
+    )
+    ..registerLazySingleton<ExperienceRepository>(
+      () => CascadingExperienceRepository(
+        fetchRemote: CascadingExperienceRepository.remoteFrom(
+          di(),
+          env.appVersion,
+        ),
+        cache: di(),
+        loadBundled: (screen) =>
+            rootBundle.loadString('assets/sdui/default_$screen.json'),
+        parser: di(),
+        appVersion: env.appVersion,
+      ),
+    )
     // sesión y navegación
     ..registerLazySingleton<SessionCubit>(
       () => SessionCubit(
@@ -117,6 +154,6 @@ void registerAppDependencies(
     ..registerLazySingleton<GoRouter>(
       () => buildRouter(env: env, session: di(), di: di),
     );
+  // El último home guardado incluye el nombre del usuario.
+  di<SessionCleanupRegistry>().register(() => di<ExperienceCache>().clear());
 }
-
-void _debugReport(Object error) => debugPrint('Error no fatal: $error');

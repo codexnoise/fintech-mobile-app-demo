@@ -8,7 +8,12 @@ final class AppEnv {
     required this.apiBaseUrl,
     required this.useEmulators,
     this.appCheckDebugToken,
+    this.appVersion = defaultAppVersion,
   });
+
+  /// Debe coincidir con `version` de pubspec.yaml (se puede sobrescribir con
+  /// `--dart-define=APP_VERSION=…`).
+  static const defaultAppVersion = '1.0.0';
 
   /// Lee los valores definidos en compilación. [fallback] es el flavor del
   /// entrypoint (`main_dev.dart` / `main_prod.dart`) si `APP_ENV` no viene.
@@ -17,6 +22,10 @@ final class AppEnv {
     const apiBaseUrl = String.fromEnvironment('API_BASE_URL');
     const useEmulators = bool.fromEnvironment('USE_EMULATORS');
     const appCheckDebugToken = String.fromEnvironment('APP_CHECK_DEBUG_TOKEN');
+    const appVersion = String.fromEnvironment(
+      'APP_VERSION',
+      defaultValue: defaultAppVersion,
+    );
 
     final flavor = switch (rawEnv) {
       'dev' => AppFlavor.dev,
@@ -38,6 +47,7 @@ final class AppEnv {
           flavor == AppFlavor.dev && appCheckDebugToken.isNotEmpty
           ? appCheckDebugToken
           : null,
+      appVersion: appVersion,
     );
   }
 
@@ -48,6 +58,7 @@ final class AppEnv {
   /// Debug token de App Check registrado en la consola (solo dev). Si es
   /// `null`, el SDK genera uno y lo imprime en el log al arrancar.
   final String? appCheckDebugToken;
+  final String appVersion;
 
   bool get isDev => flavor == AppFlavor.dev;
 }

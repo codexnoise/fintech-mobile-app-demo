@@ -106,7 +106,7 @@ void main() {
   });
 
   testWidgets('usa locale es_EC', (tester) async {
-    await pumpAt(tester, _dev, NexoRoutes.home);
+    await pumpAt(tester, _dev, NexoRoutes.accounts);
 
     final context = tester.element(find.byType(Scaffold));
     expect(Localizations.localeOf(context), NexoApp.locale);

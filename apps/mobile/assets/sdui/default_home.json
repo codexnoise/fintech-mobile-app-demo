@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "screen": "home",
+  "segment": "default",
+  "version": "bundled-1",
+  "ttlSeconds": 60,
+  "components": [
+    { "id": "greeting", "type": "greeting_header", "props": { "title": "Hola 👋", "subtitle": "Tu dinero, simple y a la mano" } },
+    { "id": "balance", "type": "balance_summary", "props": { "source": "accounts", "showAccounts": true } },
+    { "id": "actions", "type": "quick_actions", "props": { "actions": [
+      { "label": "Transferir", "icon": "swap_horiz", "action": { "type": "navigate", "route": "/transfers/new" } },
+      { "label": "Mis cuentas", "icon": "receipt", "action": { "type": "navigate", "route": "/accounts" } }
+    ] } },
+    { "id": "tip", "type": "insight_card", "props": { "title": "¿Sabías que?", "text": "Puedes transferir entre tus cuentas al instante y sin costo." } }
+  ]
+}

@@ -15,3 +15,4 @@ export 'src/session/session_contracts.dart';
 export 'src/failure_messages.dart';
 export 'src/connectivity.dart';
 export 'src/contracts/accounts.dart';
+export 'src/error_reporter.dart';
