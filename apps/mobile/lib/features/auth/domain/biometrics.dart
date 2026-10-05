@@ -1,3 +1,6 @@
+/// Cómo confirma su identidad un usuario con sesión vigente.
+enum UnlockMethod { biometric, password }
+
 enum BiometricResult {
   success,
 

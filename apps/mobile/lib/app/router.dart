@@ -6,6 +6,12 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nexo_core/nexo_core.dart';
 
+import '../features/auth/domain/auth_repository.dart';
+import '../features/auth/domain/logout.dart';
+import '../features/auth/presentation/biometric_setup_cubit.dart';
+import '../features/auth/presentation/biometric_setup_page.dart';
+import '../features/auth/presentation/lock_cubit.dart';
+import '../features/auth/presentation/lock_page.dart';
 import '../features/auth/presentation/login_cubit.dart';
 import '../features/auth/presentation/login_page.dart';
 import '../features/auth/presentation/register_cubit.dart';
@@ -16,6 +22,7 @@ import 'env.dart';
 import 'placeholder_page.dart';
 import 'session/session_cubit.dart';
 import 'session/session_redirect.dart';
+import 'session/session_status.dart';
 import 'splash_page.dart';
 
 /// Construye el router. Los guards dependen de [session]; [di] resuelve las
@@ -60,9 +67,38 @@ GoRouter buildRouter({
           child: const OnboardingPage(),
         ),
       ),
-      page(NexoRoutes.biometricSetup, 'Biometría'),
-      page(NexoRoutes.lock, 'App bloqueada'),
-      page(NexoRoutes.home, 'Inicio'),
+      GoRoute(
+        path: NexoRoutes.biometricSetup,
+        builder: (_, _) => BlocProvider(
+          create: (_) => BiometricSetupCubit(di(), di(), di(), di()),
+          child: const BiometricSetupPage(),
+        ),
+      ),
+      GoRoute(
+        path: NexoRoutes.lock,
+        builder: (_, _) => BlocProvider(
+          create: (_) => LockCubit(
+            di(),
+            di(),
+            di(),
+            di(),
+            method: switch (session.state) {
+              SessionLocked(:final method) => method,
+              _ => UnlockMethod.password,
+            },
+          ),
+          child: LockPage(email: di<AuthRepository>().currentUser?.email),
+        ),
+      ),
+      GoRoute(
+        path: NexoRoutes.home,
+        builder: (_, state) => PlaceholderPage(
+          title: 'Inicio',
+          location: state.uri,
+          // Temporal hasta el home SDUI (F4).
+          onSignOut: () => di<LogoutUseCase>()(),
+        ),
+      ),
       page(NexoRoutes.accountPattern, 'Detalle de cuenta'),
       page(NexoRoutes.transferNew, 'Nueva transferencia'),
       page(NexoRoutes.microAppPattern, 'Micro-app'),

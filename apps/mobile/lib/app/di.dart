@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:local_auth/local_auth.dart';
@@ -10,6 +12,7 @@ import '../features/auth/data/firebase_auth_repository.dart';
 import '../features/auth/data/local_biometrics.dart';
 import '../features/auth/domain/auth_repository.dart';
 import '../features/auth/domain/biometrics.dart';
+import '../features/auth/domain/logout.dart';
 import '../features/onboarding/data/api_profile_repository.dart';
 import '../features/onboarding/domain/profile_repository.dart';
 import 'env.dart';
@@ -34,6 +37,7 @@ void configureDependencies(AppEnv env) {
     biometricPrefs: SecureBiometricPreferences(
       SecureBiometricPreferences.createStorage(),
     ),
+    reportError: (e) => FirebaseCrashlytics.instance.recordError(e, null),
   );
 }
 
@@ -48,6 +52,7 @@ void registerAppDependencies(
   required BiometricAuthenticator biometric,
   required BiometricPreferences biometricPrefs,
   ProfileRepository? profileRepository,
+  void Function(Object error) reportError = _debugReport,
 }) {
   di
     ..registerSingleton<AppEnv>(env)
@@ -67,6 +72,9 @@ void registerAppDependencies(
     ..registerSingleton<AuthRepository>(authRepository)
     ..registerSingleton<BiometricAuthenticator>(biometric)
     ..registerSingleton<BiometricPreferences>(biometricPrefs)
+    ..registerLazySingleton<LogoutUseCase>(
+      () => LogoutUseCase(di(), di(), di(), onCleanupError: reportError),
+    )
     // onboarding
     ..registerLazySingleton<ProfileRepository>(
       () => profileRepository ?? ApiProfileRepository(di()),
@@ -85,3 +93,5 @@ void registerAppDependencies(
       () => buildRouter(env: env, session: di(), di: di),
     );
 }
+
+void _debugReport(Object error) => debugPrint('Error no fatal: $error');

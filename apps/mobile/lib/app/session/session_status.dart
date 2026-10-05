@@ -1,8 +1,9 @@
 import 'package:nexo_core/nexo_core.dart';
 
+import '../../features/auth/domain/biometrics.dart';
 import '../../features/onboarding/domain/user_profile.dart';
 
-enum UnlockMethod { biometric, password }
+export '../../features/auth/domain/biometrics.dart' show UnlockMethod;
 
 /// Estado de la sesión de la app. El router decide la pantalla a partir de él.
 sealed class SessionStatus {
