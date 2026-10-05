@@ -16,6 +16,7 @@ class HomePage extends StatelessWidget {
     this.slots = const {},
     this.errorReporter,
     this.actions,
+    this.header,
     super.key,
   });
 
@@ -25,6 +26,9 @@ class HomePage extends StatelessWidget {
   final Map<String, SduiSlotBuilder> slots;
   final ErrorReporter? errorReporter;
   final List<Widget>? actions;
+
+  /// Contenido de la app sobre el documento SDUI (ej. pedir permisos).
+  final Widget? header;
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +60,7 @@ class HomePage extends StatelessWidget {
                 ),
               ],
               HomeLoaded(:final experience) => [
+                ?header,
                 if (_sourceNotice(experience) case final notice?) ...[
                   notice,
                   const SizedBox(height: NexoSpacing.md),
