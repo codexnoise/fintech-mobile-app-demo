@@ -11,6 +11,9 @@ import '../features/accounts/presentation/account_detail_page.dart';
 import '../features/accounts/presentation/accounts_cubit.dart';
 import '../features/accounts/presentation/accounts_page.dart';
 import '../features/accounts/presentation/balance_summary.dart';
+import '../features/assistant/domain/assistant.dart';
+import '../features/assistant/presentation/assistant_cubit.dart';
+import '../features/assistant/presentation/assistant_page.dart';
 import '../features/auth/domain/auth_repository.dart';
 import '../features/auth/domain/logout.dart';
 import '../features/auth/presentation/biometric_setup_cubit.dart';
@@ -42,19 +45,13 @@ import 'session/session_status.dart';
 import 'splash_page.dart';
 
 /// Construye el router. Los guards dependen de [session]; [di] resuelve las
-/// dependencias de cada pantalla. Los placeholders se reemplazan bloque a
-/// bloque (F2–F11).
+/// dependencias de cada pantalla.
 GoRouter buildRouter({
   required AppEnv env,
   required SessionCubit session,
   required GetIt di,
   String initialLocation = NexoRoutes.splash,
 }) {
-  GoRoute page(String path, String title) => GoRoute(
-    path: path,
-    builder: (_, state) => PlaceholderPage(title: title, location: state.uri),
-  );
-
   return GoRouter(
     initialLocation: initialLocation,
     debugLogDiagnostics: env.isDev,
@@ -197,7 +194,22 @@ GoRouter buildRouter({
                 );
         },
       ),
-      page(NexoRoutes.assistant, 'Asistente'),
+      GoRoute(
+        path: NexoRoutes.assistant,
+        builder: (_, state) => BlocProvider(
+          create: (_) => AssistantCubit(di())
+            ..start(
+              initial: AssistantPrompt.fromWire(
+                state.uri.queryParameters['promptId'],
+              ),
+            ),
+          child: AssistantPage(
+            registry: di(),
+            parser: di(),
+            errorReporter: di(),
+          ),
+        ),
+      ),
       // Herramienta de demo: no existe en builds de producción.
       if (env.isDev)
         GoRoute(

@@ -26,14 +26,14 @@ completo y verificable en lugar de muchas piezas a medias.
 | R5 | Notificaciones push | P0 | ✅ | FCM con canales, opt-in en contexto, push al completar transferencia y campaña por segmento (topics), deep links con allowlist que respetan el bloqueo. Verificado en producción. |
 | R6 | Monitoreo en producción | P0 (impl. mínima) | ✅ | ✅ Crashlytics (fatales y no fatales) con custom keys `request_id` y `segment`, logs JSON estructurados en Functions, correlation id `X-Request-Id` app↔backend, eventos de Analytics (`transfer_completed`, `sdui_fallback_used`, `micro_app_quote_accepted`) y user property `segment` (F8 mínimo). 📄 Performance traces. Ver [observability](observability.md). |
 | R7 | Conectividad limitada / latencia / caída parcial | P0 | ✅ | ✅ Caché offline de Firestore con banner stale, last-known-good del SDUI, timeouts + retry con backoff y jitter (solo idempotentes), kill switches por servicio (`PUT /admin/flags` → 503 → "en mantenimiento"), transferencias bloqueadas offline. ✅ F7: Network Lab (offline, +3 s, forzar 503) y circuit breaker por servicio, verificados en emulador. Ver [resilience](resilience.md). |
-| R8 | Tests unit + widget + 1 E2E | P0 | ✅ | ✅ 254 tests Flutter + 56 backend + E2E `integration_test` del flujo login → home SDUI → transferencia (adaptadores en memoria, con checks de accesibilidad). Ver [testing](testing.md). |
+| R8 | Tests unit + widget + 1 E2E | P0 | ✅ | ✅ 262 tests Flutter + 56 backend + E2E `integration_test` del flujo login → home SDUI → transferencia (adaptadores en memoria, con checks de accesibilidad). Ver [testing](testing.md). |
 | R9 | Uso de IA e impacto | P0 | ✅ | [ai-log](ai/ai-log.md) por tarea + [resumen medido](ai/ai-usage.md). |
 | R10 | Decisiones de arquitectura (ADRs) | P0 | ✅ | 13 ADRs en [`adr/`](adr/), formato Problema · Alternativas · Opción · Trade-offs · Impacto. |
 | R11 | README reproducible, arquitectura, despliegue y operación | P0 | ✅ | [README](../README.md), [architecture](architecture.md), [api](api.md), [deployment-operations](deployment-operations.md). |
 | R12 | Trunk Based Development + historial | P0 | ✅ | Commits pequeños a `main` con Conventional Commits, CI en cada push. |
 | R13 | Demostración funcional (video) | P0 | 🚧 | Se graba al cierre, en Android. |
 | B1 | Integración nativa (`FLAG_SECURE` / app switcher) | P1 | 📄 | F10, segundo candidato a corte. |
-| B2 | Asistente generativo | P2 | ⚠️ | ✅ Backend `POST /assistant` acotado con fallback determinista (Gemini deshabilitado en el despliegue). 📄 Pantalla en la app (F11, primer candidato a corte): la ruta `/assistant` hoy abre un placeholder. |
+| B2 | Asistente generativo | P2 | ✅ | ✅ Backend `POST /assistant` acotado con fallback determinista (Gemini deshabilitado en el despliegue). ✅ Pantalla `/assistant` (F11): 3 preguntas predefinidas, respuesta de solo lectura con el mismo renderer SDUI, etiqueta de origen (IA verificada / resumen automático), estados loading/error/no disponible. |
 | B3 | Automatizaciones dev/test/deploy/docs | P1 | ✅ | CI (format/analyze/test/coverage), release por tag con APK ofuscado y deploy opcional de Firebase, hook de Claude Code que formatea cada `.dart`, Dart MCP, Dependabot, prompts versionados. 📄 comando para ADRs y changelog automático. |
 
 ## Cortado o fuera de alcance, y por qué
