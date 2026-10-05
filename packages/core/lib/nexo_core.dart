@@ -13,3 +13,5 @@ export 'src/network/token_providers.dart';
 export 'src/navigation/nexo_routes.dart';
 export 'src/session/session_contracts.dart';
 export 'src/failure_messages.dart';
+export 'src/connectivity.dart';
+export 'src/contracts/accounts.dart';

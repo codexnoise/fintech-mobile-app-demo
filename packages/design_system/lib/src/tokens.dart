@@ -13,6 +13,11 @@ abstract final class NexoColors {
   static const success = Color(0xFF15803D);
   static const warning = Color(0xFFB45309);
   static const error = Color(0xFFB91C1C);
+
+  // Fondos de estado (Stitch: DESIGN.md). Texto encima en el color sólido.
+  static const brandContainer = Color(0xFFF0FDFA);
+  static const warningContainer = Color(0xFFFEF3C7);
+  static const errorContainer = Color(0xFFFEE2E2);
 }
 
 abstract final class NexoSpacing {
