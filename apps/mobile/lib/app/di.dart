@@ -97,13 +97,19 @@ void registerAppDependencies(
     ..registerSingleton<AuthTokenProvider>(authTokens)
     ..registerSingleton<AppCheckTokenProvider>(appCheckTokens)
     ..registerSingleton<SessionCleanupRegistry>(SessionCleanupRegistry())
-    ..registerLazySingleton<ChaosInterceptor>(ChaosInterceptor.new)
+    // Resiliencia: caos solo configurable desde el Network Lab (dev).
+    ..registerSingleton<ChaosSettings>(ChaosSettings())
+    ..registerLazySingleton<ChaosInterceptor>(
+      () => ChaosInterceptor(settings: di()),
+    )
+    ..registerSingleton<CircuitBreaker>(CircuitBreaker())
     ..registerLazySingleton<ApiClient>(
       () => ApiClient(
         baseUrl: env.apiBaseUrl,
         authTokens: di(),
         appCheckTokens: di(),
         chaos: di(),
+        breaker: di(),
       ),
     )
     // auth

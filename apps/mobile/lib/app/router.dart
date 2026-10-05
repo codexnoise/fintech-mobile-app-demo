@@ -26,6 +26,7 @@ import '../features/experience/presentation/home_page.dart';
 import '../features/micro_apps/data/context_token.dart';
 import '../features/micro_apps/domain/micro_app.dart';
 import '../features/micro_apps/presentation/micro_app_page.dart';
+import '../features/network_lab/network_lab_page.dart';
 import '../features/notifications/presentation/notification_opt_in.dart';
 import '../features/notifications/presentation/push_coordinator.dart';
 import '../features/onboarding/presentation/onboarding_cubit.dart';
@@ -134,6 +135,12 @@ GoRouter buildRouter({
               ),
             },
             actions: [
+              if (env.isDev)
+                IconButton(
+                  tooltip: 'Network Lab',
+                  icon: const Icon(Icons.science_outlined),
+                  onPressed: () => context.push(NexoRoutes.networkLab),
+                ),
               IconButton(
                 tooltip: 'Cerrar sesión',
                 icon: const Icon(Icons.logout),
@@ -189,7 +196,11 @@ GoRouter buildRouter({
       ),
       page(NexoRoutes.assistant, 'Asistente'),
       // Herramienta de demo: no existe en builds de producción.
-      if (env.isDev) page(NexoRoutes.networkLab, 'Network Lab'),
+      if (env.isDev)
+        GoRoute(
+          path: NexoRoutes.networkLab,
+          builder: (_, _) => NetworkLabPage(chaos: di(), breaker: di()),
+        ),
     ],
     errorBuilder: (_, state) =>
         PlaceholderPage(title: 'Página no encontrada', location: state.uri),
