@@ -17,6 +17,7 @@ import '../features/onboarding/data/api_profile_repository.dart';
 import '../features/onboarding/domain/profile_repository.dart';
 import 'env.dart';
 import 'infra/firebase_token_providers.dart';
+import 'infra/firestore_cleanup.dart';
 import 'router.dart';
 import 'session/session_cubit.dart';
 
@@ -38,6 +39,9 @@ void configureDependencies(AppEnv env) {
       SecureBiometricPreferences.createStorage(),
     ),
     reportError: (e) => FirebaseCrashlytics.instance.recordError(e, null),
+  );
+  getIt<SessionCleanupRegistry>().register(
+    () => clearFirestoreCache(getIt<FirebaseFirestore>()),
   );
 }
 

@@ -13,6 +13,7 @@ import '../firebase_options.dart';
 import 'app.dart';
 import 'di.dart';
 import 'env.dart';
+import 'session/auto_lock.dart';
 import 'session/session_cubit.dart';
 
 /// Punto de entrada común de `main_dev.dart` y `main_prod.dart`.
@@ -31,6 +32,7 @@ Future<void> bootstrap(AppFlavor flavor) async {
 
       configureDependencies(env);
       final session = getIt<SessionCubit>()..start();
+      AutoLock(onLock: session.lock).attach();
       runApp(NexoApp(router: getIt<GoRouter>(), session: session));
     },
     (error, stack) {
