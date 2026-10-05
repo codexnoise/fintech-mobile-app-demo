@@ -9,6 +9,8 @@ import 'interceptors.dart';
 /// (`{ "error": { code, message, requestId, details } }`) a [Failure].
 /// Tabla de mapeo: docs/api.md § Errores.
 abstract final class ErrorMapper {
+  static const _flowCodes = {'onboarding_required', 'already_onboarded'};
+
   static Failure map(DioException e) {
     switch (e.type) {
       case DioExceptionType.connectionTimeout:
@@ -37,6 +39,12 @@ abstract final class ErrorMapper {
         envelope?['requestId'] as String? ??
         response?.headers.value(RequestIdInterceptor.header) ??
         e.requestOptions.headers[RequestIdInterceptor.header] as String?;
+
+    // Estados del flujo de registro: se reconocen por código, no por status
+    // (el BFF responde /me con 404 onboarding_required).
+    if (code != null && _flowCodes.contains(code)) {
+      return ValidationFailure(code, message);
+    }
 
     return switch (status) {
       401 || 403 => UnauthorizedFailure(message),

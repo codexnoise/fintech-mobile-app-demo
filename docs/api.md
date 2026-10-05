@@ -25,7 +25,7 @@ Base URL:
 | 400 | `invalid_request`, `invalid_json` | `ValidationFailure` |
 | 401 | `unauthenticated`, `app_check_failed` | `UnauthorizedFailure` |
 | 404 | `*_not_found` | `ServerFailure` |
-| 409 | `onboarding_required`, `already_onboarded` | `ValidationFailure(code)` |
+| 409 (404 en `GET /me`) | `onboarding_required`, `already_onboarded` | `ValidationFailure(code)` — la app los reconoce por `code`, no por status |
 | 422 | reglas de negocio (ver transfers) | `ValidationFailure(code)` |
 | 503 | `service_unavailable` | `ServiceUnavailableFailure(retryAfter)` |
 | 5xx | `internal_error` | `ServerFailure(requestId)` |

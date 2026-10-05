@@ -51,6 +51,16 @@ void main() {
       expect((f as ValidationFailure).code, 'onboarding_required');
     });
 
+    test(
+      '404 onboarding_required (como responde /me) -> ValidationFailure',
+      () async {
+        final f = await mapReply(
+          JsonReply(404, errorEnvelope('onboarding_required')),
+        );
+        expect((f as ValidationFailure).code, 'onboarding_required');
+      },
+    );
+
     test('422 insufficient_funds -> ValidationFailure(code)', () async {
       final f = await mapReply(
         JsonReply(
