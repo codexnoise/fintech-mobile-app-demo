@@ -137,4 +137,30 @@ void main() {
       expect(compareSemver('1.0.0+5', '1.0.0'), 0);
     });
   });
+
+  test('acepta mapas no tipados (literal vacío, caché)', () {
+    final parser = SduiParser(
+      supportedTypes: const {'greeting_header'},
+      allowedRoutes: const {'/home'},
+      allowedMicroApps: const {},
+    );
+    final Map<dynamic, dynamic> untyped = {
+      'schemaVersion': 1,
+      'screen': 'home',
+      'components': [
+        {'id': 'g', 'type': 'greeting_header', 'props': {}},
+      ],
+    };
+
+    final result = parser.parse(untyped, appVersion: '1.0.0');
+
+    expect(result.document.components.single.id, 'g');
+    expect(
+      parser.parseAction(<dynamic, dynamic>{
+        'type': 'navigate',
+        'route': '/home',
+      }),
+      isA<NavigateAction>(),
+    );
+  });
 }
