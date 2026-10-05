@@ -5,6 +5,10 @@ import 'package:mocktail/mocktail.dart';
 import 'package:nexo_core/nexo_core.dart';
 import 'package:nexo_mobile/app/di.dart';
 import 'package:nexo_mobile/app/env.dart';
+import 'package:nexo_mobile/app/session/session_cubit.dart';
+import 'package:nexo_mobile/features/onboarding/domain/profile_repository.dart';
+
+import '../helpers/fakes.dart';
 
 class _MockAuthTokens extends Mock implements AuthTokenProvider {}
 
@@ -25,6 +29,9 @@ void main() {
       env: env,
       authTokens: _MockAuthTokens(),
       appCheckTokens: _MockAppCheckTokens(),
+      authRepository: FakeAuthRepository(),
+      biometric: FakeBiometricAuthenticator(),
+      biometricPrefs: FakeBiometricPreferences(),
     );
   });
 
@@ -32,6 +39,11 @@ void main() {
     expect(di<AppEnv>(), same(env));
     expect(di<GoRouter>(), isA<GoRouter>());
     expect(di<ApiClient>(), same(di<ApiClient>()));
+    expect(di<ProfileRepository>(), isNotNull);
+  });
+
+  test('SessionSignals es la misma instancia que SessionCubit', () {
+    expect(di<SessionSignals>(), same(di<SessionCubit>()));
   });
 
   test('el ApiClient apunta a API_BASE_URL con el caos inyectado', () {

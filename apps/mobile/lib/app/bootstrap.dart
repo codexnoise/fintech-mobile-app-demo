@@ -13,6 +13,7 @@ import '../firebase_options.dart';
 import 'app.dart';
 import 'di.dart';
 import 'env.dart';
+import 'session/session_cubit.dart';
 
 /// Punto de entrada común de `main_dev.dart` y `main_prod.dart`.
 Future<void> bootstrap(AppFlavor flavor) async {
@@ -29,7 +30,8 @@ Future<void> bootstrap(AppFlavor flavor) async {
       if (env.useEmulators) await _useEmulators();
 
       configureDependencies(env);
-      runApp(NexoApp(router: getIt<GoRouter>()));
+      final session = getIt<SessionCubit>()..start();
+      runApp(NexoApp(router: getIt<GoRouter>(), session: session));
     },
     (error, stack) {
       if (Firebase.apps.isEmpty) {

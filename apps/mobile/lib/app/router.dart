@@ -1,33 +1,21 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
+import 'package:nexo_core/nexo_core.dart';
 
 import 'env.dart';
 import 'placeholder_page.dart';
+import 'session/session_cubit.dart';
+import 'session/session_redirect.dart';
+import 'splash_page.dart';
 
-/// Rutas de la app. Las features se comunican navegando a estas rutas, nunca
-/// importándose entre sí.
-abstract final class AppRoutes {
-  static const splash = '/splash';
-  static const login = '/login';
-  static const register = '/register';
-  static const onboarding = '/onboarding';
-  static const lock = '/lock';
-  static const home = '/home';
-  static const accountPattern = '/accounts/:id';
-  static const transferNew = '/transfers/new';
-  static const microAppPattern = '/micro-apps/:appId';
-  static const assistant = '/assistant';
-  static const networkLab = '/dev/network-lab';
-
-  static String account(String id) => '/accounts/${Uri.encodeComponent(id)}';
-  static String microApp(String appId) =>
-      '/micro-apps/${Uri.encodeComponent(appId)}';
-}
-
-/// Construye el router. Las pantallas reales reemplazan a los placeholders
-/// bloque a bloque (F2–F11); los guards de sesión llegan en F2.
+/// Construye el router. Los guards dependen de [session]; las pantallas
+/// reales reemplazan a los placeholders bloque a bloque (F2–F11).
 GoRouter buildRouter({
   required AppEnv env,
-  String initialLocation = AppRoutes.splash,
+  required SessionCubit session,
+  String initialLocation = NexoRoutes.splash,
 }) {
   GoRoute page(String path, String title) => GoRoute(
     path: path,
@@ -37,38 +25,39 @@ GoRouter buildRouter({
   return GoRouter(
     initialLocation: initialLocation,
     debugLogDiagnostics: env.isDev,
+    refreshListenable: _StreamListenable(session.stream),
+    redirect: (_, state) => sessionRedirect(session.state, state.uri),
     routes: [
-      GoRoute(
-        path: AppRoutes.splash,
-        builder: (_, _) => SplashPlaceholder(showRouteIndex: env.isDev),
-      ),
-      page(AppRoutes.login, 'Iniciar sesión'),
-      page(AppRoutes.register, 'Crear cuenta'),
-      page(AppRoutes.onboarding, 'Onboarding'),
-      page(AppRoutes.lock, 'App bloqueada'),
-      page(AppRoutes.home, 'Inicio'),
-      page(AppRoutes.accountPattern, 'Detalle de cuenta'),
-      page(AppRoutes.transferNew, 'Nueva transferencia'),
-      page(AppRoutes.microAppPattern, 'Micro-app'),
-      page(AppRoutes.assistant, 'Asistente'),
+      GoRoute(path: NexoRoutes.splash, builder: (_, _) => const SplashPage()),
+      page(NexoRoutes.login, 'Iniciar sesión'),
+      page(NexoRoutes.register, 'Crear cuenta'),
+      page(NexoRoutes.onboarding, 'Onboarding'),
+      page(NexoRoutes.biometricSetup, 'Biometría'),
+      page(NexoRoutes.lock, 'App bloqueada'),
+      page(NexoRoutes.home, 'Inicio'),
+      page(NexoRoutes.accountPattern, 'Detalle de cuenta'),
+      page(NexoRoutes.transferNew, 'Nueva transferencia'),
+      page(NexoRoutes.microAppPattern, 'Micro-app'),
+      page(NexoRoutes.assistant, 'Asistente'),
       // Herramienta de demo: no existe en builds de producción.
-      if (env.isDev) page(AppRoutes.networkLab, 'Network Lab'),
+      if (env.isDev) page(NexoRoutes.networkLab, 'Network Lab'),
     ],
     errorBuilder: (_, state) =>
         PlaceholderPage(title: 'Página no encontrada', location: state.uri),
   );
 }
 
-/// Rutas navegables desde el índice de desarrollo del splash.
-const devRouteIndex = <(String, String)>[
-  ('Iniciar sesión', AppRoutes.login),
-  ('Crear cuenta', AppRoutes.register),
-  ('Onboarding', AppRoutes.onboarding),
-  ('App bloqueada', AppRoutes.lock),
-  ('Inicio', AppRoutes.home),
-  ('Cuenta corriente', '/accounts/checking'),
-  ('Nueva transferencia', AppRoutes.transferNew),
-  ('Viaja Seguro', '/micro-apps/travel_insurance'),
-  ('Asistente', AppRoutes.assistant),
-  ('Network Lab', AppRoutes.networkLab),
-];
+/// Re-evalúa los redirects cada vez que cambia la sesión.
+final class _StreamListenable extends ChangeNotifier {
+  _StreamListenable(Stream<Object?> stream) {
+    _subscription = stream.listen((_) => notifyListeners());
+  }
+
+  late final StreamSubscription<Object?> _subscription;
+
+  @override
+  void dispose() {
+    unawaited(_subscription.cancel());
+    super.dispose();
+  }
+}
