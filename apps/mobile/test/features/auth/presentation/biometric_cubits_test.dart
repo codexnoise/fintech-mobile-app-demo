@@ -141,7 +141,7 @@ void main() {
         isA<LockIdle>().having(
           (s) => s.message,
           'message',
-          'Correo o contraseña incorrectos.',
+          'Contraseña incorrecta.',
         ),
       ],
       verify: (_) => verifyNever(signals.unlocked),

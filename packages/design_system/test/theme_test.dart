@@ -3,6 +3,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:nexo_design_system/nexo_design_system.dart';
 
 void main() {
+  test('la barra de progreso distingue avance y pista', () {
+    final theme = NexoTheme.light().progressIndicatorTheme;
+    expect(theme.color, NexoColors.brand);
+    expect(theme.linearTrackColor, NexoColors.border);
+  });
+
   test('el tema usa los tokens de marca', () {
     final theme = NexoTheme.light();
     expect(theme.colorScheme.primary, NexoColors.brand);

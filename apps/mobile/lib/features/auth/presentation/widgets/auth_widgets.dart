@@ -27,6 +27,16 @@ class PasswordField extends StatefulWidget {
 class _PasswordFieldState extends State<PasswordField> {
   bool _obscured = true;
 
+  // Fuera del orden de foco: "siguiente" en el teclado debe ir al próximo
+  // campo, no al botón de mostrar contraseña.
+  final _toggleFocus = FocusNode(skipTraversal: true);
+
+  @override
+  void dispose() {
+    _toggleFocus.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -42,6 +52,7 @@ class _PasswordFieldState extends State<PasswordField> {
         labelText: widget.label,
         prefixIcon: const Icon(Icons.lock_outline),
         suffixIcon: IconButton(
+          focusNode: _toggleFocus,
           tooltip: _obscured ? 'Mostrar contraseña' : 'Ocultar contraseña',
           icon: Icon(
             _obscured
