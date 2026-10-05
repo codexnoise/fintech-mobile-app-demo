@@ -1,11 +1,15 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nexo_core/nexo_core.dart';
 
+import '../features/accounts/presentation/account_detail_cubit.dart';
+import '../features/accounts/presentation/account_detail_page.dart';
+import '../features/accounts/presentation/accounts_cubit.dart';
+import '../features/accounts/presentation/accounts_page.dart';
 import '../features/auth/domain/auth_repository.dart';
 import '../features/auth/domain/logout.dart';
 import '../features/auth/presentation/biometric_setup_cubit.dart';
@@ -90,16 +94,39 @@ GoRouter buildRouter({
           child: LockPage(email: di<AuthRepository>().currentUser?.email),
         ),
       ),
+      // Temporal hasta el home SDUI (F4): la lista de cuentas hace de inicio.
       GoRoute(
         path: NexoRoutes.home,
-        builder: (_, state) => PlaceholderPage(
-          title: 'Inicio',
-          location: state.uri,
-          // Temporal hasta el home SDUI (F4).
-          onSignOut: () => di<LogoutUseCase>()(),
+        builder: (context, _) => BlocProvider(
+          create: (_) => AccountsCubit(di())..start(),
+          child: AccountsPage(
+            title: 'Inicio',
+            actions: [
+              IconButton(
+                tooltip: 'Cerrar sesión',
+                icon: const Icon(Icons.logout),
+                onPressed: () => di<LogoutUseCase>()(),
+              ),
+            ],
+          ),
         ),
       ),
-      page(NexoRoutes.accountPattern, 'Detalle de cuenta'),
+      GoRoute(
+        path: NexoRoutes.accounts,
+        builder: (_, _) => BlocProvider(
+          create: (_) => AccountsCubit(di())..start(),
+          child: const AccountsPage(),
+        ),
+      ),
+      GoRoute(
+        path: NexoRoutes.accountPattern,
+        builder: (_, state) => BlocProvider(
+          create: (_) =>
+              AccountDetailCubit(di(), accountId: state.pathParameters['id']!)
+                ..start(),
+          child: const AccountDetailPage(),
+        ),
+      ),
       page(NexoRoutes.transferNew, 'Nueva transferencia'),
       page(NexoRoutes.microAppPattern, 'Micro-app'),
       page(NexoRoutes.assistant, 'Asistente'),

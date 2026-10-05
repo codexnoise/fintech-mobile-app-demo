@@ -6,6 +6,7 @@ import 'package:nexo_core/nexo_core.dart';
 import 'package:nexo_mobile/app/di.dart';
 import 'package:nexo_mobile/app/env.dart';
 import 'package:nexo_mobile/app/session/session_cubit.dart';
+import 'package:nexo_mobile/features/accounts/domain/accounts_repository.dart';
 import 'package:nexo_mobile/features/onboarding/domain/profile_repository.dart';
 
 import '../helpers/fakes.dart';
@@ -32,6 +33,7 @@ void main() {
       authRepository: FakeAuthRepository(),
       biometric: FakeBiometricAuthenticator(),
       biometricPrefs: FakeBiometricPreferences(),
+      currentUser: FakeCurrentUser(),
     );
   });
 
@@ -40,6 +42,7 @@ void main() {
     expect(di<GoRouter>(), isA<GoRouter>());
     expect(di<ApiClient>(), same(di<ApiClient>()));
     expect(di<ProfileRepository>(), isNotNull);
+    expect(di<AccountsSource>(), same(di<AccountsRepository>()));
   });
 
   test('SessionSignals es la misma instancia que SessionCubit', () {

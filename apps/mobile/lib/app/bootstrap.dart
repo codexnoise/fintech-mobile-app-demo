@@ -8,6 +8,8 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 
 import '../firebase_options.dart';
 import 'app.dart';
@@ -22,6 +24,8 @@ Future<void> bootstrap(AppFlavor flavor) async {
     () async {
       WidgetsFlutterBinding.ensureInitialized();
       final env = AppEnv.fromEnvironment(fallback: flavor);
+      Intl.defaultLocale = 'es';
+      await initializeDateFormatting('es');
 
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,

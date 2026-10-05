@@ -9,6 +9,8 @@ import 'package:nexo_mobile/app/env.dart';
 import 'package:nexo_mobile/app/router.dart';
 import 'package:nexo_mobile/app/session/session_cubit.dart';
 import 'package:nexo_mobile/app/session/session_status.dart';
+import 'package:nexo_mobile/features/accounts/domain/accounts_repository.dart';
+import 'package:nexo_mobile/features/accounts/presentation/account_detail_page.dart';
 import 'package:nexo_mobile/features/auth/domain/auth_repository.dart';
 
 import '../helpers/fakes.dart';
@@ -45,7 +47,9 @@ Future<MockSession> pumpAt(
         env: env,
         session: session,
         di: GetIt.asNewInstance()
-          ..registerSingleton<AuthRepository>(FakeAuthRepository()),
+          ..registerSingleton<AuthRepository>(FakeAuthRepository())
+          ..registerSingleton<AccountsRepository>(FakeAccountsRepository())
+          ..registerSingleton<AccountsSource>(FakeAccountsRepository()),
         initialLocation: location,
       ),
       session: session,
@@ -59,8 +63,7 @@ void main() {
   testWidgets('resuelve rutas con parámetros', (tester) async {
     await pumpAt(tester, _dev, NexoRoutes.account('savings'));
 
-    expect(find.text('Detalle de cuenta'), findsWidgets);
-    expect(find.text('/accounts/savings'), findsOneWidget);
+    expect(find.byType(AccountDetailPage), findsOneWidget);
   });
 
   testWidgets('Network Lab existe en dev', (tester) async {

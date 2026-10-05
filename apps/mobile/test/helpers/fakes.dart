@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:nexo_core/nexo_core.dart';
+import 'package:nexo_mobile/features/accounts/domain/accounts_repository.dart';
+import 'package:nexo_mobile/features/accounts/domain/movement.dart';
 import 'package:nexo_mobile/features/auth/domain/auth_repository.dart';
 import 'package:nexo_mobile/features/auth/domain/biometrics.dart';
 import 'package:nexo_mobile/features/onboarding/domain/profile_repository.dart';
@@ -126,4 +128,33 @@ final class FakeProfileRepository implements ProfileRepository {
     if (completeResult.isOk) profile = completeResult;
     return completeResult;
   }
+}
+
+class FakeAccountsRepository implements AccountsRepository {
+  final accounts = StreamController<Result<Live<List<Account>>>>.broadcast();
+  final account = StreamController<Result<Live<Account>>>.broadcast();
+  final movements = StreamController<Result<Live<List<Movement>>>>.broadcast();
+  final requestedLimits = <int>[];
+
+  @override
+  Stream<Result<Live<List<Account>>>> watchAccounts() => accounts.stream;
+
+  @override
+  Stream<Result<Live<Account>>> watchAccount(String id) => account.stream;
+
+  @override
+  Stream<Result<Live<List<Movement>>>> watchMovements(
+    String accountId, {
+    required int limit,
+  }) {
+    requestedLimits.add(limit);
+    return movements.stream;
+  }
+}
+
+final class FakeCurrentUser implements CurrentUserProvider {
+  FakeCurrentUser([this.uid = 'u1']);
+
+  @override
+  String? uid;
 }
