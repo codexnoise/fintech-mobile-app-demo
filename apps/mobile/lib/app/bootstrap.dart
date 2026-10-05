@@ -16,6 +16,7 @@ import 'app.dart';
 import 'di.dart';
 import 'env.dart';
 import 'session/auto_lock.dart';
+import 'session/deep_link_gate.dart';
 import 'session/session_cubit.dart';
 import 'session/session_status.dart';
 import '../features/notifications/presentation/push_coordinator.dart';
@@ -54,13 +55,23 @@ Future<void> bootstrap(AppFlavor flavor) async {
   );
 }
 
-/// Push: el tap navega (si la app está bloqueada, el guard pasa por /lock y
-/// vuelve a la ruta) y el token se registra cuando hay sesión con perfil.
+/// Push: el token se registra cuando hay sesión con perfil, y el tap pasa por
+/// [DeepLinkGate] para abrirse recién con la app visible y la sesión lista
+/// (después de /lock si correspondía).
 void _wirePush(SessionCubit session, GoRouter router) {
   final push = getIt<PushCoordinator>();
-  push.routes.listen(router.push);
+  final gate = DeepLinkGate(
+    currentStatus: () => session.state,
+    isForeground: () =>
+        WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed,
+    navigate: router.push,
+  );
+  AppLifecycleListener(onResume: gate.onResumed);
+  push.routes.listen(gate.add);
+
   void onStatus(SessionStatus status) {
     if (status is SessionReady) unawaited(push.onSessionReady());
+    gate.onStatus(status);
   }
 
   session.stream.listen(onStatus);

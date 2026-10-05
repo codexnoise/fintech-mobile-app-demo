@@ -220,6 +220,28 @@ void main() {
   );
 
   group('lock()', () {
+    test('bloquea en el mismo frame, sin esperar al storage', () async {
+      when(() => prefs.isEnabled('u1')).thenAnswer((_) async => true);
+      final cubit = build();
+      users.add(null);
+      await Future<void>.delayed(Duration.zero);
+      users.add(_user);
+      await Future<void>.delayed(Duration.zero);
+      expect(cubit.state, isA<SessionReady>());
+
+      unawaited(cubit.lock());
+
+      expect(
+        cubit.state,
+        isA<SessionLocked>().having(
+          (s) => s.method,
+          'method',
+          UnlockMethod.biometric,
+        ),
+      );
+      await cubit.close();
+    });
+
     blocTest<SessionCubit, SessionStatus>(
       'bloquea una sesión lista',
       build: build,

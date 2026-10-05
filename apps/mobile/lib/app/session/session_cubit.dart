@@ -28,6 +28,9 @@ class SessionCubit extends Cubit<SessionStatus> implements SessionSignals {
   StreamSubscription<AuthUser?>? _subscription;
   String? _uid;
   UserProfile? _profile;
+
+  /// Cómo se desbloquea al auto-bloquear; se calcula al quedar lista.
+  UnlockMethod? _lockMethod;
   bool _firstEvent = true;
 
   /// Invalida resoluciones en curso cuando cambia la sesión.
@@ -55,12 +58,12 @@ class SessionCubit extends Cubit<SessionStatus> implements SessionSignals {
   }
 
   /// Auto-lock: solo bloquea una sesión ya lista.
+  ///
+  /// Emite en el mismo frame del resume (sin esperar al secure storage) para
+  /// que nada alcance a mostrarse ni a navegar con la sesión desbloqueada.
   Future<void> lock() async {
-    final uid = _uid;
-    if (uid == null || state is! SessionReady) return;
-    final generation = _generation;
-    final method = await _unlockMethod(uid);
-    if (generation == _generation) emit(SessionLocked(method));
+    if (_uid == null || state is! SessionReady) return;
+    emit(SessionLocked(_lockMethod ?? UnlockMethod.password));
   }
 
   /// Reintento manual desde la pantalla de error del splash.
@@ -82,6 +85,8 @@ class SessionCubit extends Cubit<SessionStatus> implements SessionSignals {
     await _prefs.markOffered(uid);
     final profile = _profile;
     if (profile == null) return _resolve(++_generation);
+    // La biometría pudo activarse recién: recalcular el método de bloqueo.
+    _lockMethod = await _unlockMethod(uid);
     emit(SessionReady(profile));
   }
 
@@ -107,6 +112,7 @@ class SessionCubit extends Cubit<SessionStatus> implements SessionSignals {
         _profile = profile;
         final offer =
             !await _prefs.wasOffered(uid) && await _biometric.isAvailable();
+        _lockMethod = await _unlockMethod(uid);
         if (generation != _generation) return;
         emit(
           offer ? const SessionNeedsBiometricSetup() : SessionReady(profile),
