@@ -1,7 +1,7 @@
 /// Monto monetario representado SIEMPRE en unidades menores (centavos).
 ///
 /// Nunca usamos `double` para dinero: los errores de redondeo binario son
-/// inaceptables en contexto bancario (ver docs/adr/0011-money-as-integers.md).
+/// inaceptables en contexto bancario (ver docs/adr/0011-dinero-en-enteros.md).
 final class Money implements Comparable<Money> {
   const Money(this.cents, {this.currency = 'USD'});
 
