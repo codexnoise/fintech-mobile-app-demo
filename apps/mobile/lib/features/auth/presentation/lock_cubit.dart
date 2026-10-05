@@ -87,6 +87,16 @@ class LockCubit extends Cubit<LockScreenState> {
     switch (result) {
       case Ok():
         await _unlocked();
+      // El correo está fijo en esta pantalla: solo puede fallar la clave.
+      case Err(
+        failure: ValidationFailure(code: AuthErrorCodes.invalidCredentials),
+      ):
+        emit(
+          const LockIdle(
+            UnlockMethod.password,
+            message: 'Contraseña incorrecta.',
+          ),
+        );
       case Err(:final failure):
         emit(
           LockIdle(UnlockMethod.password, message: authErrorMessage(failure)),

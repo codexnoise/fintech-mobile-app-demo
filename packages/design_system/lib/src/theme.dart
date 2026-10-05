@@ -49,6 +49,10 @@ abstract final class NexoTheme {
           ),
         ),
       ),
+      progressIndicatorTheme: const ProgressIndicatorThemeData(
+        color: NexoColors.brand,
+        linearTrackColor: NexoColors.border,
+      ),
       inputDecorationTheme: const InputDecorationTheme(
         filled: true,
         fillColor: NexoColors.surface,
