@@ -19,8 +19,8 @@
 | `packages/core` | 59 | `money`, `result`, `failure_messages`, `session_cleanup_registry`, `network/{api_client, error_mapper, retry_interceptor, resilience}` (circuit breaker + caos) |
 | `packages/design_system` | 14 | `theme_test` (contraste AA), `components_test` (etiquetas `Semantics` de montos, contraste) |
 | `packages/sdui_engine` | 18 | `sdui_parser_test`, `sdui_view_test` (tap targets, labels, contraste) |
-| `apps/mobile` | 163 | `test/app/**` (DI, router, sesión, auto-lock, deep links, tokens de Firebase) y `test/features/**` (auth, onboarding, accounts, transfers, experience, notifications, micro_apps) |
-| **Total Flutter** | **254** (+ 2 E2E) | |
+| `apps/mobile` | 171 | `test/app/**` (DI, router, sesión, auto-lock, deep links, tokens de Firebase) y `test/features/**` (auth, onboarding, assistant, accounts, transfers, experience, notifications, micro_apps) |
+| **Total Flutter** | **262** (+ 2 E2E) | |
 | `backend/functions` | 56 | `test/domain.test.ts` (dominio puro), `test/api.test.ts` (HTTP de punta a punta con `supertest`) |
 
 ## Decisiones

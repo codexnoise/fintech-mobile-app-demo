@@ -114,7 +114,7 @@ fvm flutter build apk --release -t lib/main_prod.dart --dart-define-from-file=en
 ## Tests
 
 ```bash
-make test                                   # Flutter: core 59 · design_system 14 · sdui_engine 18 · mobile 163 (254)
+make test                                   # Flutter: core 59 · design_system 14 · sdui_engine 18 · mobile 171 (262)
 make analyze && make format
 cd backend/functions && npm test            # backend: 56 (vitest + supertest, adaptadores en memoria)
 make check                                  # format + analyze + test Flutter + test backend

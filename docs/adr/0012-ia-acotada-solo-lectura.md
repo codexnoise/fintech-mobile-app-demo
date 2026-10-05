@@ -41,7 +41,8 @@ Asistente en `POST /assistant` (`backend/functions/src/domain/assistant.ts`,
    Kill switch `assistantEnabled` y servicio `assistant` en `degradedServices`.
 
 Estado: backend ✅ y desplegado (hoy con fallback determinista porque la key está en `disabled`);
-pantalla del asistente en la app 📄 pendiente (bloque F11).
+pantalla del asistente en la app ✅ (F11): preguntas predefinidas sin texto libre, respuesta parseada con el mismo
+`SduiParser` (allowlist) y dibujada sin acciones, con etiqueta visible del origen de la respuesta.
 
 ## Trade-offs
 

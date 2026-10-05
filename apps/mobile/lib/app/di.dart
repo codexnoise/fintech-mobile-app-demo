@@ -15,6 +15,8 @@ import 'package:nexo_sdui_engine/nexo_sdui_engine.dart';
 
 import '../features/accounts/data/firestore_accounts_repository.dart';
 import '../features/accounts/domain/accounts_repository.dart';
+import '../features/assistant/data/api_assistant_repository.dart';
+import '../features/assistant/domain/assistant.dart';
 import '../features/auth/data/firebase_auth_repository.dart';
 import '../features/auth/data/local_biometrics.dart';
 import '../features/auth/domain/auth_repository.dart';
@@ -176,6 +178,10 @@ void registerAppDependencies(
         parser: di(),
         appVersion: env.appVersion,
       ),
+    )
+    // asistente (solo lectura, mismo contrato SDUI)
+    ..registerLazySingleton<AssistantRepository>(
+      () => ApiAssistantRepository(di(), di(), env.appVersion),
     )
     // sesión y navegación
     ..registerLazySingleton<SessionCubit>(
