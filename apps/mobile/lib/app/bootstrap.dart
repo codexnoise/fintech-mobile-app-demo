@@ -10,6 +10,7 @@ import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:nexo_core/nexo_core.dart';
 
 import '../firebase_options.dart';
 import 'app.dart';
@@ -42,6 +43,7 @@ Future<void> bootstrap(AppFlavor flavor) async {
       final router = getIt<GoRouter>();
       AutoLock(onLock: session.lock).attach();
       _wirePush(session, router);
+      _wireObservability(session);
       runApp(NexoApp(router: router, session: session));
     },
     (error, stack) {
@@ -77,6 +79,27 @@ void _wirePush(SessionCubit session, GoRouter router) {
   session.stream.listen(onStatus);
   onStatus(session.state);
   unawaited(push.start());
+}
+
+/// Segmento como contexto de Crashlytics y user property de Analytics
+/// (dimensión para comparar experiencias por segmento). Sin PII.
+void _wireObservability(SessionCubit session) {
+  final analytics = getIt<AnalyticsTracker>();
+  void onStatus(SessionStatus status) {
+    final String? segment;
+    if (status is SessionReady) {
+      segment = status.profile.segment.wire;
+    } else if (status is SessionUnauthenticated) {
+      segment = null;
+    } else {
+      return;
+    }
+    analytics.setUserProperty('segment', segment);
+    FirebaseCrashlytics.instance.setCustomKey('segment', segment ?? 'none');
+  }
+
+  session.stream.listen(onStatus);
+  onStatus(session.state);
 }
 
 Future<void> _configureCrashlytics(AppEnv env) async {

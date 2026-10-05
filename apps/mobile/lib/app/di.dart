@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -29,6 +30,7 @@ import '../features/transfers/data/api_transfers_repository.dart';
 import '../features/transfers/domain/transfer.dart';
 import 'env.dart';
 import 'infra/crashlytics_error_reporter.dart';
+import 'infra/firebase_analytics_tracker.dart';
 import 'infra/firebase_current_user.dart';
 import 'infra/firebase_token_providers.dart';
 import 'infra/firestore_cleanup.dart';
@@ -55,6 +57,7 @@ void configureDependencies(AppEnv env) {
       SecureBiometricPreferences.createStorage(),
     ),
     errorReporter: CrashlyticsErrorReporter(FirebaseCrashlytics.instance),
+    analytics: FirebaseAnalyticsTracker(FirebaseAnalytics.instance),
   );
   getIt.registerLazySingleton<PushCoordinator>(
     () => PushCoordinator(
@@ -90,10 +93,12 @@ void registerAppDependencies(
   AccountsRepository? accountsRepository,
   ExperienceCache? experienceCache,
   ErrorReporter errorReporter = const PrintErrorReporter(),
+  AnalyticsTracker analytics = const NoopAnalytics(),
 }) {
   di
     ..registerSingleton<AppEnv>(env)
     ..registerSingleton<ErrorReporter>(errorReporter)
+    ..registerSingleton<AnalyticsTracker>(analytics)
     ..registerSingleton<AuthTokenProvider>(authTokens)
     ..registerSingleton<AppCheckTokenProvider>(appCheckTokens)
     ..registerSingleton<SessionCleanupRegistry>(SessionCleanupRegistry())
@@ -110,6 +115,7 @@ void registerAppDependencies(
         appCheckTokens: di(),
         chaos: di(),
         breaker: di(),
+        errorReporter: di(),
       ),
     )
     // auth

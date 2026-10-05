@@ -7,6 +7,8 @@ import 'package:nexo_mobile/features/experience/domain/experience.dart';
 import 'package:nexo_mobile/features/experience/presentation/home_cubit.dart';
 import 'package:nexo_sdui_engine/nexo_sdui_engine.dart';
 
+import '../../helpers/fakes.dart';
+
 final _parser = SduiParser(
   supportedTypes: SduiRegistry.standardTypes,
   allowedRoutes: const {'/transfers/new'},
@@ -180,6 +182,26 @@ void main() {
 
       expect(remote.calls, 2);
       expect(title((c.state as HomeLoaded).experience), 'nuevo');
+    });
+
+    test('usar un fallback se registra en analytics', () async {
+      final analytics = FakeAnalytics();
+      remote.next = const Result.err(NetworkFailure());
+      final c = HomeCubit(
+        repo(),
+        segment: 'premium',
+        now: () => now,
+        analytics: analytics,
+      );
+
+      await c.start();
+
+      expect(analytics.events.single.$1, 'sdui_fallback_used');
+      expect(analytics.events.single.$2, {
+        'screen': 'home',
+        'source': 'bundled',
+        'reason': 'NetworkFailure',
+      });
     });
 
     test('si el refresh falla conserva lo que mostraba', () async {

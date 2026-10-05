@@ -94,6 +94,34 @@ void main() {
     expect(state.draft.to?.id, 'checking');
   });
 
+  test('éxito registra transfer_completed sin datos sensibles', () async {
+    final analytics = FakeAnalytics();
+    final cubit = TransferCubit(
+      accounts,
+      transfers,
+      connectivity,
+      newIdempotencyKey: () => 'k',
+      analytics: analytics,
+    );
+    await cubit.start();
+    accounts.accounts.add(
+      Result.ok(
+        Live([
+          _account('checking', 100000),
+          _account('savings', 50000),
+        ], isFromCache: false),
+      ),
+    );
+    await Future<void>.delayed(Duration.zero);
+    cubit
+      ..setAmount(const Money(2500))
+      ..review();
+    await cubit.confirm();
+
+    expect(analytics.events.single.$1, 'transfer_completed');
+    expect(analytics.events.single.$2, {'replayed': false});
+  });
+
   test('éxito: revisa, confirma y envía con idempotencyKey', () async {
     final cubit = await ready();
     cubit

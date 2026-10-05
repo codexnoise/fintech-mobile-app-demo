@@ -117,6 +117,7 @@ GoRouter buildRouter({
                   SessionReady(:final profile) => profile.segment.wire,
                   _ => 'default',
                 },
+                analytics: di(),
               )..start(),
             ),
             BlocProvider(create: (_) => AccountsCubit(di())..start()),
@@ -174,6 +175,7 @@ GoRouter buildRouter({
             di(),
             di(),
             initialFromId: state.uri.queryParameters['from'],
+            analytics: di(),
           )..start(),
           child: const TransferPage(),
         ),
@@ -190,6 +192,7 @@ GoRouter buildRouter({
               : MicroAppPage(
                   app: app,
                   apiBase: env.apiBaseUrl,
+                  analytics: di(),
                   fetchToken: (appId) => fetchContextToken(di(), appId),
                 );
         },

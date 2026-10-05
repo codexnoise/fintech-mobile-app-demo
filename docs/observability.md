@@ -1,7 +1,7 @@
 # Observabilidad
 
 Qué se mide hoy en Nexo, cómo se correlaciona un error de la app con el backend y qué se propone para
-operar en producción. Estado: ✅ implementado · 📄 propuesto (bloque F8, no implementado).
+operar en producción. Estado: ✅ implementado · 📄 propuesto (evolución).
 
 ## Implementado (✅)
 
@@ -41,9 +41,10 @@ El middleware `requestId` (`backend/functions/src/http/middleware.ts`) registra 
 
 ## Cómo cruzar un error de la app con el log del backend
 
-1. Obtener el `requestId`: viaja en el header `X-Request-Id` y en `error.requestId` de la respuesta, y la app lo
-   conserva en `ServerFailure.requestId`. Hoy la app no lo muestra ni lo registra, así que se obtiene en debug
-   (inspector del Dart MCP / breakpoint) o reproduciendo con `curl -i`.
+1. Obtener el `requestId`: cuando el BFF falla (5xx o respuesta con contrato roto), el `ApiClient` reporta un no
+   fatal a Crashlytics con razón `BFF <ruta> <código>` y la custom key **`request_id`**
+   (`packages/core/lib/src/network/api_client.dart`, `apps/mobile/lib/app/infra/crashlytics_error_reporter.dart`).
+   Los errores de red y de negocio (4xx) son esperados y no se reportan. También viaja en `X-Request-Id`.
 2. En Cloud Logging (Logs Explorer), filtrar:
    ```
    resource.type="cloud_run_revision"
@@ -52,10 +53,23 @@ El middleware `requestId` (`backend/functions/src/http/middleware.ts`) registra 
    Se obtienen la línea `http_request` (status, latencia, `uid` hasheado) y, si hubo, `unhandled_error` con el stack.
 3. Para ver todos los requests de un usuario sin exponer su uid, calcular `hashUid(uid)` y filtrar por `jsonPayload.uid`.
 
-Limitación actual: el `requestId` todavía no se adjunta como *custom key* en Crashlytics, así que el cruce desde un
-reporte no fatal todavía no es directo. Es el primer punto de la propuesta F8.
+## Implementado en F8 (versión mínima)
 
-## Propuesto (📄 F8)
+- **Correlación:** custom key `request_id` en cada no fatal del BFF (ver arriba) y custom key `segment`.
+- **Analytics** (contrato `AnalyticsTracker` en `packages/core/lib/src/analytics.dart`, implementación
+  `apps/mobile/lib/app/infra/firebase_analytics_tracker.dart`), sin montos ni datos personales:
+
+  | Evento / propiedad | Dónde | Parámetros | Para qué |
+  |---|---|---|---|
+  | user property `segment` | `bootstrap.dart` al quedar la sesión lista | `young_digital` · `entrepreneur` · `premium` | Comparar todo por segmento |
+  | `transfer_completed` | `TransferCubit` | `replayed` | Éxito de transferencias y reintentos idempotentes |
+  | `sdui_fallback_used` | `HomeCubit` | `screen`, `source` (`cache`/`bundled`), `reason` | Tasa de fallback SDUI (SLO < 2 %) |
+  | `micro_app_quote_accepted` | `MicroAppPage` | `app_id`, `plan` | Conversión del aliado por segmento |
+
+- Verificado en emulador contra producción con Analytics en modo debug: `Setting user property: segment, premium`
+  y `Logging event: origin=app,name=transfer_completed,params={replayed=false}`.
+
+## Propuesto (📄 evolución)
 
 Las dependencias `firebase_analytics` y `firebase_performance` ya están en `apps/mobile/pubspec.yaml` y el plugin
 Gradle de Performance está aplicado, pero **no hay instrumentación en código**.

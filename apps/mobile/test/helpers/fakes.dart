@@ -158,3 +158,16 @@ final class FakeCurrentUser implements CurrentUserProvider {
   @override
   String? uid;
 }
+
+final class FakeAnalytics implements AnalyticsTracker {
+  final events = <(String, Map<String, Object>)>[];
+  final userProperties = <String, String?>{};
+
+  @override
+  void track(String event, [Map<String, Object> params = const {}]) =>
+      events.add((event, params));
+
+  @override
+  void setUserProperty(String name, String? value) =>
+      userProperties[name] = value;
+}
