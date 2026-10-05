@@ -10,3 +10,6 @@ export 'src/network/api_client.dart';
 export 'src/network/error_mapper.dart';
 export 'src/network/interceptors.dart';
 export 'src/network/token_providers.dart';
+export 'src/navigation/nexo_routes.dart';
+export 'src/session/session_contracts.dart';
+export 'src/failure_messages.dart';

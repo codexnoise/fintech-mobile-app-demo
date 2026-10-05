@@ -1,8 +1,17 @@
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:nexo_core/nexo_core.dart';
 import 'package:nexo_mobile/app/app.dart';
 import 'package:nexo_mobile/app/env.dart';
 import 'package:nexo_mobile/app/router.dart';
+import 'package:nexo_mobile/app/session/session_cubit.dart';
+import 'package:nexo_mobile/app/session/session_status.dart';
+
+import '../helpers/fakes.dart';
+
+class MockSession extends MockCubit<SessionStatus> implements SessionCubit {}
 
 const _dev = AppEnv(
   flavor: AppFlavor.dev,
@@ -15,61 +24,82 @@ const _prod = AppEnv(
   useEmulators: false,
 );
 
-Future<void> pumpAt(WidgetTester tester, AppEnv env, String location) async {
+Future<MockSession> pumpAt(
+  WidgetTester tester,
+  AppEnv env,
+  String location, {
+  SessionStatus status = const SessionReady(testProfile),
+}) async {
+  final session = MockSession();
+  when(() => session.state).thenReturn(status);
+  whenListen(
+    session,
+    const Stream<SessionStatus>.empty(),
+    initialState: status,
+  );
   await tester.pumpWidget(
     NexoApp(
-      router: buildRouter(env: env, initialLocation: location),
+      router: buildRouter(
+        env: env,
+        session: session,
+        initialLocation: location,
+      ),
+      session: session,
     ),
   );
   await tester.pumpAndSettle();
+  return session;
 }
 
 void main() {
-  testWidgets('arranca en splash con el índice de rutas en dev', (
-    tester,
-  ) async {
-    await pumpAt(tester, _dev, AppRoutes.splash);
-
-    expect(find.text('Nexo'), findsOneWidget);
-    expect(find.text(AppRoutes.home), findsOneWidget);
-  });
-
-  testWidgets('el splash de prod no expone el índice de rutas', (tester) async {
-    await pumpAt(tester, _prod, AppRoutes.splash);
-
-    expect(find.byType(ListTile), findsNothing);
-  });
-
   testWidgets('resuelve rutas con parámetros', (tester) async {
-    await pumpAt(tester, _dev, AppRoutes.account('savings'));
+    await pumpAt(tester, _dev, NexoRoutes.account('savings'));
 
     expect(find.text('Detalle de cuenta'), findsWidgets);
     expect(find.text('/accounts/savings'), findsOneWidget);
   });
 
   testWidgets('Network Lab existe en dev', (tester) async {
-    await pumpAt(tester, _dev, AppRoutes.networkLab);
+    await pumpAt(tester, _dev, NexoRoutes.networkLab);
 
     expect(find.text('Network Lab'), findsWidgets);
   });
 
   testWidgets('Network Lab no existe en prod', (tester) async {
-    await pumpAt(tester, _prod, AppRoutes.networkLab);
+    await pumpAt(tester, _prod, NexoRoutes.networkLab);
 
     expect(find.text('Página no encontrada'), findsWidgets);
   });
 
-  testWidgets('navega desde el índice de dev', (tester) async {
-    await pumpAt(tester, _dev, AppRoutes.splash);
+  testWidgets('aplica el guard de sesión', (tester) async {
+    await pumpAt(
+      tester,
+      _dev,
+      NexoRoutes.home,
+      status: const SessionUnauthenticated(),
+    );
 
-    await tester.tap(find.text('Nueva transferencia'));
-    await tester.pumpAndSettle();
+    expect(find.text(NexoRoutes.login), findsOneWidget);
+  });
 
-    expect(find.text(AppRoutes.transferNew), findsOneWidget);
+  testWidgets('splash muestra el error del perfil con reintento', (
+    tester,
+  ) async {
+    final session = await pumpAt(
+      tester,
+      _dev,
+      NexoRoutes.home,
+      status: const SessionProfileUnavailable(NetworkFailure()),
+    );
+    when(session.retry).thenAnswer((_) async {});
+
+    await tester.tap(find.text('Reintentar'));
+
+    verify(session.retry).called(1);
   });
 
   testWidgets('usa locale es_EC', (tester) async {
-    await pumpAt(tester, _dev, AppRoutes.home);
+    await pumpAt(tester, _dev, NexoRoutes.home);
 
     final context = tester.element(find.byType(Scaffold));
     expect(Localizations.localeOf(context), NexoApp.locale);
