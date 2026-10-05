@@ -1,0 +1,20 @@
+# Actualizaciones de dependencias (OWASP M2 · supply chain). PRs semanales y agrupadas.
+version: 2
+updates:
+  - package-ecosystem: pub
+    directory: /
+    schedule: { interval: weekly }
+    open-pull-requests-limit: 5
+    groups:
+      flutter:
+        patterns: ["*"]
+  - package-ecosystem: npm
+    directory: /backend/functions
+    schedule: { interval: weekly }
+    open-pull-requests-limit: 5
+    groups:
+      backend:
+        patterns: ["*"]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule: { interval: weekly }
