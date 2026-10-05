@@ -1,6 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:nexo_core/nexo_core.dart';
 import 'package:nexo_mobile/app/app.dart';
@@ -8,6 +9,7 @@ import 'package:nexo_mobile/app/env.dart';
 import 'package:nexo_mobile/app/router.dart';
 import 'package:nexo_mobile/app/session/session_cubit.dart';
 import 'package:nexo_mobile/app/session/session_status.dart';
+import 'package:nexo_mobile/features/auth/domain/auth_repository.dart';
 
 import '../helpers/fakes.dart';
 
@@ -42,6 +44,8 @@ Future<MockSession> pumpAt(
       router: buildRouter(
         env: env,
         session: session,
+        di: GetIt.asNewInstance()
+          ..registerSingleton<AuthRepository>(FakeAuthRepository()),
         initialLocation: location,
       ),
       session: session,
@@ -79,7 +83,7 @@ void main() {
       status: const SessionUnauthenticated(),
     );
 
-    expect(find.text(NexoRoutes.login), findsOneWidget);
+    expect(find.text('Bienvenido a Nexo'), findsOneWidget);
   });
 
   testWidgets('splash muestra el error del perfil con reintento', (
