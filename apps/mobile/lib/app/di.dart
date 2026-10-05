@@ -17,6 +17,8 @@ import '../features/auth/domain/biometrics.dart';
 import '../features/auth/domain/logout.dart';
 import '../features/onboarding/data/api_profile_repository.dart';
 import '../features/onboarding/domain/profile_repository.dart';
+import '../features/transfers/data/api_transfers_repository.dart';
+import '../features/transfers/domain/transfer.dart';
 import 'env.dart';
 import 'infra/firebase_current_user.dart';
 import 'infra/firebase_token_providers.dart';
@@ -98,6 +100,10 @@ void registerAppDependencies(
     )
     ..registerLazySingleton<AccountsSource>(() => di<AccountsRepository>())
     ..registerLazySingleton<ConnectivityMonitor>(ConnectivityPlusMonitor.new)
+    // transfers
+    ..registerLazySingleton<TransfersRepository>(
+      () => ApiTransfersRepository(di()),
+    )
     // sesión y navegación
     ..registerLazySingleton<SessionCubit>(
       () => SessionCubit(
