@@ -82,6 +82,6 @@ void registerAppDependencies(
     )
     ..registerLazySingleton<SessionSignals>(() => di<SessionCubit>())
     ..registerLazySingleton<GoRouter>(
-      () => buildRouter(env: env, session: di()),
+      () => buildRouter(env: env, session: di(), di: di),
     );
 }
