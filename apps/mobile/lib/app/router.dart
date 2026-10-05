@@ -10,6 +10,8 @@ import '../features/auth/presentation/login_cubit.dart';
 import '../features/auth/presentation/login_page.dart';
 import '../features/auth/presentation/register_cubit.dart';
 import '../features/auth/presentation/register_page.dart';
+import '../features/onboarding/presentation/onboarding_cubit.dart';
+import '../features/onboarding/presentation/onboarding_page.dart';
 import 'env.dart';
 import 'placeholder_page.dart';
 import 'session/session_cubit.dart';
@@ -51,7 +53,13 @@ GoRouter buildRouter({
           child: const RegisterPage(),
         ),
       ),
-      page(NexoRoutes.onboarding, 'Onboarding'),
+      GoRoute(
+        path: NexoRoutes.onboarding,
+        builder: (_, _) => BlocProvider(
+          create: (_) => OnboardingCubit(di(), di()),
+          child: const OnboardingPage(),
+        ),
+      ),
       page(NexoRoutes.biometricSetup, 'Biometría'),
       page(NexoRoutes.lock, 'App bloqueada'),
       page(NexoRoutes.home, 'Inicio'),
