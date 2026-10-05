@@ -33,7 +33,7 @@ minutos y de forma determinista, sin depender de servicios desplegados ni de un 
 - **CI** (`.github/workflows/ci.yml`): format, analyze y test con coverage de los cuatro miembros Flutter;
   typecheck y coverage del backend; chequeo de sintaxis de la micro-app.
 
-Volumen al cierre: 253 tests Flutter (core 59, design_system 13, sdui_engine 18, mobile 163) y 56 tests
+Volumen al cierre: 254 tests Flutter (core 59, design_system 14, sdui_engine 18, mobile 163) y 56 tests
 de backend. Detalle en [docs/testing.md](../testing.md).
 
 ## Trade-offs
@@ -42,8 +42,9 @@ de backend. Detalle en [docs/testing.md](../testing.md).
 - **A favor:** inyectar reloj y `sleep` hace deterministas el backoff, el TTL SDUI y el auto-lock.
 - **En contra:** las reglas de Firestore no tienen tests automatizados con el emulador; se validan con
   el emulador manualmente y por diseño deny-by-default.
-- **En contra (📄):** no hay aún test E2E con `integration_test` (bloque F9); el flujo
-  registro → home → transferencia se valida a mano.
+- **E2E (F9):** `apps/mobile/integration_test/app_test.dart` recorre login → home SDUI → transferencia sobre el
+  grafo real de la app con adaptadores en memoria, más guidelines de accesibilidad. **En contra (📄):** no corre
+  contra Emulator Suite ni en CI; el recorrido contra el backend real se valida a mano.
 - Los fakes pueden divergir del comportamiento real de Firebase; se mitiga probando contra emuladores y
   producción en los flujos críticos.
 

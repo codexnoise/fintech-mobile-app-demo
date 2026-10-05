@@ -1,7 +1,7 @@
 # Atajos del monorepo. Requiere FVM (Flutter 3.47.4) y Node 22.
 MEMBERS := packages/core packages/design_system packages/sdui_engine apps/mobile
 
-.PHONY: get format analyze test coverage functions-test check
+.PHONY: get format analyze test e2e coverage functions-test check
 
 get:
 	fvm dart pub get
@@ -14,6 +14,10 @@ analyze:
 
 test:
 	@set -e; for m in $(MEMBERS); do echo "== $$m"; (cd $$m && fvm flutter test); done
+
+# E2E del flujo crítico en un emulador/dispositivo Android conectado.
+e2e:
+	cd apps/mobile && fvm flutter test integration_test
 
 coverage:
 	@set -e; for m in $(MEMBERS); do (cd $$m && fvm flutter test --coverage); done

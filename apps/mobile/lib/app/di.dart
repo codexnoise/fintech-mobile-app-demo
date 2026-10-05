@@ -92,6 +92,10 @@ void registerAppDependencies(
   ProfileRepository? profileRepository,
   AccountsRepository? accountsRepository,
   ExperienceCache? experienceCache,
+  // Overrides para el E2E (adaptadores en memoria, sin red).
+  TransfersRepository? transfersRepository,
+  ConnectivityMonitor? connectivity,
+  Future<Result<Object?>> Function(String screen)? fetchExperience,
   ErrorReporter errorReporter = const PrintErrorReporter(),
   AnalyticsTracker analytics = const NoopAnalytics(),
 }) {
@@ -142,10 +146,12 @@ void registerAppDependencies(
           FirestoreAccountsRepository(() => di<FirebaseFirestore>(), di()),
     )
     ..registerLazySingleton<AccountsSource>(() => di<AccountsRepository>())
-    ..registerLazySingleton<ConnectivityMonitor>(ConnectivityPlusMonitor.new)
+    ..registerLazySingleton<ConnectivityMonitor>(
+      () => connectivity ?? ConnectivityPlusMonitor(),
+    )
     // transfers
     ..registerLazySingleton<TransfersRepository>(
-      () => ApiTransfersRepository(di()),
+      () => transfersRepository ?? ApiTransfersRepository(di()),
     )
     // experience (SDUI)
     ..registerLazySingleton<SduiParser>(
@@ -161,10 +167,9 @@ void registerAppDependencies(
     )
     ..registerLazySingleton<ExperienceRepository>(
       () => CascadingExperienceRepository(
-        fetchRemote: CascadingExperienceRepository.remoteFrom(
-          di(),
-          env.appVersion,
-        ),
+        fetchRemote:
+            fetchExperience ??
+            CascadingExperienceRepository.remoteFrom(di(), env.appVersion),
         cache: di(),
         loadBundled: (screen) =>
             rootBundle.loadString('assets/sdui/default_$screen.json'),

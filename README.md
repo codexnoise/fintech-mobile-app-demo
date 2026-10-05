@@ -114,13 +114,13 @@ fvm flutter build apk --release -t lib/main_prod.dart --dart-define-from-file=en
 ## Tests
 
 ```bash
-make test                                   # Flutter: core 59 · design_system 13 · sdui_engine 18 · mobile 163 (253)
+make test                                   # Flutter: core 59 · design_system 14 · sdui_engine 18 · mobile 163 (254)
 make analyze && make format
 cd backend/functions && npm test            # backend: 56 (vitest + supertest, adaptadores en memoria)
 make check                                  # format + analyze + test Flutter + test backend
 ```
 
-E2E con `integration_test` pendiente (F9). Pirámide, fakes, accesibilidad y verificación manual en
+E2E del flujo crítico (con emulador Android encendido): `make e2e`. Pirámide, fakes, accesibilidad y verificación manual en
 [docs/testing.md](docs/testing.md).
 
 ## Deploy

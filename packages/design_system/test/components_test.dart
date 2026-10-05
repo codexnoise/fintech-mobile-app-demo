@@ -66,6 +66,16 @@ void main() {
       expect(find.text('123.45'), findsOneWidget);
     });
 
+    testWidgets('área táctil de al menos 48 dp (CLAUDE.md)', (tester) async {
+      final handle = tester.ensureSemantics();
+      await tester.pumpWidget(
+        _app(AmountField(value: const Money.zero(), onChanged: (_) {})),
+      );
+
+      await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+      handle.dispose();
+    });
+
     testWidgets('ignora caracteres no numéricos', (tester) async {
       Money? last;
       await tester.pumpWidget(
