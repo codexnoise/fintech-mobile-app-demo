@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 
 import 'error_mapper.dart';
@@ -96,10 +97,85 @@ final class AppCheckInterceptor extends Interceptor {
   }
 }
 
-/// Punto de inyección de fallas para el Network Lab (F7). Por ahora no altera
-/// el tráfico; va antes del [RetryInterceptor] para que los reintentos
-/// también atraviesen el caos.
-class ChaosInterceptor extends Interceptor {}
+/// Fallas simuladas para el Network Lab (solo dev). Afecta las llamadas al
+/// BFF; Firestore se prueba con el modo avión real.
+class ChaosSettings extends ChangeNotifier {
+  bool _offline = false;
+  Duration _extraLatency = Duration.zero;
+  bool _force503 = false;
+
+  bool get offline => _offline;
+  set offline(bool value) => _update(() => _offline = value);
+
+  Duration get extraLatency => _extraLatency;
+  set extraLatency(Duration value) => _update(() => _extraLatency = value);
+
+  bool get force503 => _force503;
+  set force503(bool value) => _update(() => _force503 = value);
+
+  bool get active => _offline || _force503 || _extraLatency > Duration.zero;
+
+  void _update(void Function() change) {
+    change();
+    notifyListeners();
+  }
+}
+
+/// Inyecta las fallas de [ChaosSettings]. Va antes del [RetryInterceptor]
+/// para que los reintentos también atraviesen el caos.
+class ChaosInterceptor extends Interceptor {
+  ChaosInterceptor({
+    ChaosSettings? settings,
+    Future<void> Function(Duration)? delay,
+  }) : settings = settings ?? ChaosSettings(),
+       _delay = delay ?? Future<void>.delayed;
+
+  final ChaosSettings settings;
+  final Future<void> Function(Duration) _delay;
+
+  @override
+  Future<void> onRequest(
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
+    if (settings.extraLatency > Duration.zero) {
+      await _delay(settings.extraLatency);
+    }
+    if (settings.offline) {
+      return handler.reject(
+        DioException(
+          requestOptions: options,
+          type: DioExceptionType.connectionError,
+          message: 'Network Lab: sin conexión simulada',
+        ),
+        true,
+      );
+    }
+    if (settings.force503) {
+      return handler.reject(
+        DioException(
+          requestOptions: options,
+          type: DioExceptionType.badResponse,
+          response: Response<Object?>(
+            requestOptions: options,
+            statusCode: 503,
+            headers: Headers.fromMap({
+              'retry-after': ['60'],
+            }),
+            data: {
+              'error': {
+                'code': 'service_unavailable',
+                'message': 'Servicio en mantenimiento (Network Lab).',
+              },
+            },
+          ),
+        ),
+        true,
+      );
+    }
+    handler.next(options);
+  }
+}
 
 /// Reintentos con backoff exponencial + jitter. Solo para operaciones seguras
 /// de repetir: GET/HEAD o requests marcados con [idempotentKey].

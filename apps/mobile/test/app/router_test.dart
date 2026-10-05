@@ -49,7 +49,9 @@ Future<MockSession> pumpAt(
         di: GetIt.asNewInstance()
           ..registerSingleton<AuthRepository>(FakeAuthRepository())
           ..registerSingleton<AccountsRepository>(FakeAccountsRepository())
-          ..registerSingleton<AccountsSource>(FakeAccountsRepository()),
+          ..registerSingleton<AccountsSource>(FakeAccountsRepository())
+          ..registerSingleton<ChaosSettings>(ChaosSettings())
+          ..registerSingleton<CircuitBreaker>(CircuitBreaker()),
         initialLocation: location,
       ),
       session: session,
