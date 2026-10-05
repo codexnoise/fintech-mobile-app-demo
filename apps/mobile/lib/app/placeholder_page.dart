@@ -6,17 +6,29 @@ class PlaceholderPage extends StatelessWidget {
   const PlaceholderPage({
     required this.title,
     required this.location,
+    this.onSignOut,
     super.key,
   });
 
   final String title;
   final Uri location;
+  final VoidCallback? onSignOut;
 
   @override
   Widget build(BuildContext context) {
     final text = Theme.of(context).textTheme;
     return Scaffold(
-      appBar: AppBar(title: Text(title)),
+      appBar: AppBar(
+        title: Text(title),
+        actions: [
+          if (onSignOut != null)
+            IconButton(
+              tooltip: 'Cerrar sesión',
+              icon: const Icon(Icons.logout),
+              onPressed: onSignOut,
+            ),
+        ],
+      ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(NexoSpacing.lg),
