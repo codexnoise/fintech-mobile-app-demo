@@ -22,8 +22,9 @@ class SduiParser {
   final Set<String> allowedMicroApps;
   final int supportedSchemaVersion;
 
-  SduiParseResult parse(Object? json, {required String appVersion}) {
-    if (json is! Map<String, Object?>) {
+  SduiParseResult parse(Object? raw, {required String appVersion}) {
+    final json = _asObject(raw);
+    if (json == null) {
       throw const SduiFormatException('root must be an object');
     }
     final schemaVersion = json['schemaVersion'];
@@ -68,11 +69,12 @@ class SduiParser {
   }
 
   SduiComponent? _parseComponent(
-    Object? raw,
+    Object? value,
     String appVersion,
     List<String> warnings,
   ) {
-    if (raw is! Map<String, Object?>) {
+    final raw = _asObject(value);
+    if (raw == null) {
       warnings.add('component is not an object');
       return null;
     }
@@ -91,25 +93,25 @@ class SduiParser {
       warnings.add('"$id" requires app $minVersion (installed $appVersion)');
       return null;
     }
-    final props = raw['props'];
-    if (props != null && props is! Map<String, Object?>) {
+    final rawProps = raw['props'];
+    final props = _asObject(rawProps);
+    if (rawProps != null && props == null) {
       warnings.add('"$id" props must be an object');
       return null;
     }
     return SduiComponent(
       id: id,
       type: type,
-      props: props == null
-          ? const {}
-          : Map.unmodifiable(props as Map<String, Object?>),
+      props: props == null ? const {} : Map.unmodifiable(props),
       minAppVersion: minVersion is String ? minVersion : null,
     );
   }
 
   /// Convierte el objeto `action` de un componente en una acción permitida.
   /// Devuelve `null` si la acción no está en el allowlist.
-  SduiAction? parseAction(Object? raw) {
-    if (raw is! Map<String, Object?>) return null;
+  SduiAction? parseAction(Object? value) {
+    final raw = _asObject(value);
+    if (raw == null) return null;
     switch (raw['type']) {
       case 'navigate':
         final route = raw['route'];
@@ -130,6 +132,17 @@ class SduiParser {
         return null;
     }
   }
+}
+
+/// Acepta cualquier `Map` con claves string (jsonDecode devuelve
+/// `Map<String, dynamic>`, pero otras fuentes —literales, caché— pueden traer
+/// `Map<dynamic, dynamic>`).
+Map<String, Object?>? _asObject(Object? value) {
+  if (value is Map<String, Object?>) return value;
+  if (value is Map && value.keys.every((k) => k is String)) {
+    return value.cast<String, Object?>();
+  }
+  return null;
 }
 
 /// Compara versiones `major.minor.patch`. Segmentos faltantes = 0.

@@ -5,3 +5,4 @@ library;
 
 export 'src/sdui_models.dart';
 export 'src/sdui_parser.dart';
+export 'src/sdui_render.dart';
