@@ -10,17 +10,17 @@
 | Widget | Formularios de login/onboarding y campo de contraseña, componentes del design system, `SduiView` (render, componente que lanza se omite, guidelines de accesibilidad) | `flutter_test`, `meetsGuideline` | parte de los 238 | ✅ |
 | Backend | Dominio puro (segmentación, seed, transferencia, insights, experiencia SDUI) y API HTTP (seguridad del BFF, onboarding, SDUI, transferencias con idempotencia, push por segmento, micro-apps, asistente acotado, endpoints admin) | `vitest` + `supertest` con adaptadores en memoria | 56 | ✅ |
 | Integración manual | App real contra Firebase Emulator Suite (Auth, Firestore, Functions, Hosting) y contra el backend desplegado | Emulador Android + `adb` + Dart MCP | — | ✅ (manual, por bloque) |
-| E2E automatizado | `integration_test/critical_flow_test.dart`: registro → onboarding → home → transferencia contra emuladores | `integration_test` | 0 | 📄 F9 |
+| E2E automatizado | `apps/mobile/integration_test/app_test.dart`: login → oferta biométrica → home SDUI → transferencia + saldo insuficiente, con guidelines de accesibilidad en login, home y transferencia | `integration_test` | 2 | ✅ |
 
 ### Conteos por miembro (verificados ejecutando las suites)
 
 | Miembro | Tests | Archivos de test |
 |---|---|---|
 | `packages/core` | 59 | `money`, `result`, `failure_messages`, `session_cleanup_registry`, `network/{api_client, error_mapper, retry_interceptor, resilience}` (circuit breaker + caos) |
-| `packages/design_system` | 13 | `theme_test` (contraste AA), `components_test` (etiquetas `Semantics` de montos, contraste) |
+| `packages/design_system` | 14 | `theme_test` (contraste AA), `components_test` (etiquetas `Semantics` de montos, contraste) |
 | `packages/sdui_engine` | 18 | `sdui_parser_test`, `sdui_view_test` (tap targets, labels, contraste) |
 | `apps/mobile` | 163 | `test/app/**` (DI, router, sesión, auto-lock, deep links, tokens de Firebase) y `test/features/**` (auth, onboarding, accounts, transfers, experience, notifications, micro_apps) |
-| **Total Flutter** | **253** | |
+| **Total Flutter** | **254** (+ 2 E2E) | |
 | `backend/functions` | 56 | `test/domain.test.ts` (dominio puro), `test/api.test.ts` (HTTP de punta a punta con `supertest`) |
 
 ## Decisiones
@@ -95,9 +95,13 @@ Defectos hallados así (registrados en [ai-log](ai/ai-log.md)): orden de foco de
 
 ## Pendiente
 
-- 📄 **F9 E2E**: `integration_test/critical_flow_test.dart` contra emuladores, con `FakeBiometricAuthenticator`
-  inyectado por DI, y target `make e2e`. En CI quedaría como job opcional (`workflow_dispatch`) con
-  `android-emulator-runner` + Emulator Suite.
+- 📄 E2E contra Firebase Emulator Suite y en CI (job opcional con `android-emulator-runner`). Hoy el E2E corre
+  sobre el grafo real de la app (router, guards, cubits, SDUI, design system) con adaptadores en memoria
+  (`integration_test/support/in_memory_bank.dart`, fakes de `test/helpers/fakes.dart`) inyectados por
+  `registerAppDependencies`; es determinista y sin red. El mismo recorrido contra el backend desplegado se
+  verificó a mano en el emulador. Se corre con `make e2e` (≈13 s en el emulador).
+- Hallazgo del E2E: el `AmountField` tenía un área táctil de 44 dp (< 48); corregido en el design system y cubierto
+  por un test de `androidTapTargetGuideline` en `components_test`.
 - 📄 Tests de accesibilidad (`meetsGuideline`) sobre las pantallas de login y transferencia completas.
 - 📄 Tests de reglas de Firestore con `@firebase/rules-unit-testing`.
 - ✅ Tests del circuit breaker y del `ChaosInterceptor` (`packages/core/test/network/resilience_test.dart`); el Network Lab se verificó en emulador.

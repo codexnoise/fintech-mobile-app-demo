@@ -140,7 +140,10 @@ class _AmountFieldState extends State<AmountField> {
                 enabledBorder: InputBorder.none,
                 focusedBorder: InputBorder.none,
                 filled: false,
-                isCollapsed: true,
+                isDense: true,
+                contentPadding: EdgeInsets.zero,
+                // Área táctil mínima de 48 dp aunque el texto sea compacto.
+                constraints: BoxConstraints(minHeight: kMinTapTarget),
               ),
               onChanged: (text) =>
                   widget.onChanged(Money.fromTypedDigits(text)),
