@@ -10,6 +10,7 @@ import '../features/accounts/presentation/account_detail_cubit.dart';
 import '../features/accounts/presentation/account_detail_page.dart';
 import '../features/accounts/presentation/accounts_cubit.dart';
 import '../features/accounts/presentation/accounts_page.dart';
+import '../features/accounts/presentation/balance_summary.dart';
 import '../features/auth/domain/auth_repository.dart';
 import '../features/auth/domain/logout.dart';
 import '../features/auth/presentation/biometric_setup_cubit.dart';
@@ -20,12 +21,15 @@ import '../features/auth/presentation/login_cubit.dart';
 import '../features/auth/presentation/login_page.dart';
 import '../features/auth/presentation/register_cubit.dart';
 import '../features/auth/presentation/register_page.dart';
+import '../features/experience/presentation/home_cubit.dart';
+import '../features/experience/presentation/home_page.dart';
 import '../features/onboarding/presentation/onboarding_cubit.dart';
 import '../features/transfers/presentation/transfer_cubit.dart';
 import '../features/transfers/presentation/transfer_page.dart';
 import '../features/onboarding/presentation/onboarding_page.dart';
 import 'env.dart';
 import 'placeholder_page.dart';
+import 'sdui_actions.dart';
 import 'session/session_cubit.dart';
 import 'session/session_redirect.dart';
 import 'session/session_status.dart';
@@ -96,13 +100,31 @@ GoRouter buildRouter({
           child: LockPage(email: di<AuthRepository>().currentUser?.email),
         ),
       ),
-      // Temporal hasta el home SDUI (F4): la lista de cuentas hace de inicio.
       GoRoute(
         path: NexoRoutes.home,
-        builder: (context, _) => BlocProvider(
-          create: (_) => AccountsCubit(di())..start(),
-          child: AccountsPage(
-            title: 'Inicio',
+        builder: (context, _) => MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (_) => HomeCubit(
+                di(),
+                segment: switch (session.state) {
+                  SessionReady(:final profile) => profile.segment.wire,
+                  _ => 'default',
+                },
+              )..start(),
+            ),
+            BlocProvider(create: (_) => AccountsCubit(di())..start()),
+          ],
+          child: HomePage(
+            registry: di(),
+            parser: di(),
+            errorReporter: di(),
+            onAction: dispatchSduiAction,
+            slots: {
+              'balance_summary': (_, component) => BalanceSummary(
+                showAccounts: component.props['showAccounts'] != false,
+              ),
+            },
             actions: [
               IconButton(
                 tooltip: 'Cerrar sesión',
