@@ -11,7 +11,7 @@ resolution: workspace
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.8
+  cupertino_icons: ^2.0.0
   nexo_core:
     path: ../../packages/core
   nexo_design_system:
@@ -20,13 +20,13 @@ dependencies:
     path: ../../packages/sdui_engine
   flutter_bloc: ^9.1.1
   get_it: ^9.3.0
-  go_router: ^18.0.2
+  go_router: ^18.1.1
   dio: ^5.11.1
   uuid: ^4.6.0
   intl: ^0.20.3
-  connectivity_plus: ^6.1.4
+  connectivity_plus: ^7.3.2
   flutter_secure_storage: ^11.2.0
-  shared_preferences: ^2.5.5
+  shared_preferences: ^2.5.6
   firebase_core: ^4.15.0
   firebase_auth: ^6.7.0
   cloud_firestore: ^6.10.0
