@@ -20,7 +20,7 @@ dependencies:
     path: ../../packages/sdui_engine
   flutter_bloc: ^9.1.1
   get_it: ^9.3.0
-  go_router: ^18.1.1
+  go_router: ^18.1.2
   dio: ^5.11.1
   uuid: ^4.6.0
   intl: ^0.20.3
@@ -28,18 +28,18 @@ dependencies:
   flutter_secure_storage: ^11.2.0
   shared_preferences: ^2.5.6
   firebase_core: ^4.15.0
-  firebase_auth: ^6.7.0
-  cloud_firestore: ^6.10.0
-  firebase_app_check: ^0.4.8
-  firebase_crashlytics: ^5.4.0
-  firebase_analytics: ^12.6.0
-  firebase_performance: ^0.11.6
-  firebase_remote_config: ^6.7.0
+  firebase_auth: ^6.7.1
+  cloud_firestore: ^6.10.2
+  firebase_app_check: ^0.4.9
+  firebase_crashlytics: ^5.4.1
+  firebase_analytics: ^12.6.1
+  firebase_performance: ^0.11.7
+  firebase_remote_config: ^6.7.1
   flutter_localizations:
     sdk: flutter
   local_auth: ^3.0.2
-  firebase_messaging: ^16.7.0
-  flutter_local_notifications: ^22.0.0
+  firebase_messaging: ^16.7.1
+  flutter_local_notifications: ^22.3.3
   webview_flutter: ^4.14.1
   webview_flutter_android: ^4.14.1
 
