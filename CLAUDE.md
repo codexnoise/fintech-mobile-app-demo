@@ -1,14 +1,13 @@
 # Nexo — reglas para agentes de IA
 
-Plataforma financiera digital (proyecto personal). Spec de trabajo (local, no versionado)
-en `docs/private/spec.md`; arquitectura en `docs/architecture.md`. Este archivo manda sobre cualquier preferencia del agente.
+Plataforma financiera digital (proyecto personal). Arquitectura en `docs/architecture.md`.
+Este archivo manda sobre cualquier preferencia del agente.
 
 ## Estado y cómo continuar
-- **Leer primero `docs/private/HANDOFF.md`**: estado real, decisiones que cambiaron vs. el spec,
-  acciones manuales pendientes, gotchas y orden de trabajo con reglas de corte.
-- Bloques Flutter pendientes: prompts F1–F11 en `docs/ai/prompts/flutter-blocks.md` (ejecutar en orden).
-- Contrato del backend (ya implementado y testeado, no rediseñar): `docs/api.md`.
-- Arquitectura: `docs/architecture.md`. ADRs en `docs/adr/` (pendientes, formato en HANDOFF §6).
+- Alcance construido y pendiente: `docs/product-scope.md`. Riesgos y deuda: `docs/risks-assumptions.md`.
+- Prompts versionados por bloque (F1–F11) en `docs/ai/prompts/flutter-blocks.md`.
+- Contrato del backend (implementado y testeado, no rediseñar sin ADR): `docs/api.md`.
+- Arquitectura: `docs/architecture.md`. ADRs en `docs/adr/` (formato en `docs/adr/README.md`).
 - Ante la duda, priorizar funcionalidad P0 sobre pulido.
 
 ## Tooling de agente (versionado)

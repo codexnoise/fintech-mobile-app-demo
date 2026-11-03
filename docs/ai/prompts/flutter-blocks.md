@@ -1,11 +1,11 @@
 # Prompts para Claude Code — bloques Flutter
 
-Prompts versionados para construir la app con Claude Code. Son parte de la evidencia de
-"uso controlado de IA": cada bloque define alcance, restricciones, criterios de aceptación
+Prompts versionados para construir la app con Claude Code. Documentan cómo se controló
+el uso de IA: cada bloque define alcance, restricciones, criterios de aceptación
 y plan de commits. **Ejecutarlos en orden**, uno por sesión, revisando cada diff.
 
 **Precondiciones generales**
-- Leer `CLAUDE.md`, `docs/api.md` y el spec local `docs/private/spec.md`.
+- Leer `CLAUDE.md` y `docs/api.md`.
 - Diseños de Stitch en `~/Documents/claude/stitch/` (tokens ya cargados en `nexo_design_system`; ajustarlos si los diseños difieren).
 - Flutter 3.47.4 vía FVM. Agregar dependencias con `fvm flutter pub add` (resuelve la última versión compatible).
 - Antes de cada commit: `make format analyze test`. Commits pequeños (cada 20-30 min).

@@ -29,7 +29,7 @@
 | **Caída de un servicio del BFF** | Reintentos inútiles contra un servicio caído. | ✅ Timeouts, backoff con jitter, `Retry-After`, kill switches y circuit breaker por servicio (F7); Network Lab para demostrarlo. |
 | **Observabilidad parcial** (sin Performance ni Analytics). | Sin métricas de latencia percibida ni funnels. | ✅ Crashlytics, logs estructurados, `X-Request-Id`. 📄 F8. Ver [observability](observability.md). |
 | **LLM en banca** (asistente). | Cifras inventadas o UI/acciones generadas por el modelo. | ✅ Structured output, verificación de cifras contra datos reales, el servidor arma SDUI de solo lectura, fallback determinista (hoy Gemini está deshabilitado). |
-| **Dependencia de un solo desarrollador + IA** con deadline fijo. | Código generado sin revisión suficiente. | ✅ CLAUDE.md con zonas que requieren aprobación humana, TDD, verificación en emulador por bloque, CI en `main`. Ver [ai-usage](ai/ai-usage.md). |
+| **Dependencia de un solo desarrollador + IA** con tiempo acotado. | Código generado sin revisión suficiente. | ✅ CLAUDE.md con zonas que requieren aprobación humana, TDD, verificación en emulador por bloque, CI en `main`. Ver [ai-usage](ai/ai-usage.md). |
 
 ## Qué haría con más tiempo
 

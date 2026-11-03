@@ -7,13 +7,12 @@
 
 Primero lo que **mueve o muestra dinero** y lo que demuestra **"cambiar la experiencia sin publicar"**; después lo
 que hace creíble la operación (push, micro-app, resiliencia, observabilidad); al final los extras. P0 = obligatorio,
-P1 = suma fuerte, P2 = bonus cortable.
+P1 = suma fuerte, P2 = opcional.
 
-**Regla de corte** (plan de trabajo): el orden es F1 → F11 con un checkpoint tras F4 (registro → home SDUI →
-transferencia funcionando). *Si el lunes a las 14h00 no está terminado F7 (resiliencia), se cortan F11
-(asistente) primero y F10 (protección de pantalla nativa) después.* F8 (observabilidad) tiene un recorte
-predefinido: Crashlytics + 3 eventos. La documentación (D1) no se corta. El objetivo es entregar un núcleo P0
-completo y verificable en lugar de muchas piezas a medias.
+**Orden de construcción:** F1 → F11 con un checkpoint tras F4 (registro → home SDUI → transferencia
+funcionando). Los bloques opcionales se priorizaron al final: F11 (asistente) y F10 (protección de pantalla
+nativa). F8 (observabilidad) se acotó a Crashlytics + 3 eventos. El objetivo es un núcleo P0 completo y
+verificable en lugar de muchas piezas a medias.
 
 ## Capacidades
 
@@ -31,8 +30,8 @@ completo y verificable en lugar de muchas piezas a medias.
 | R10 | Decisiones de arquitectura (ADRs) | P0 | ✅ | 13 ADRs en [`adr/`](adr/), formato Problema · Alternativas · Opción · Trade-offs · Impacto. |
 | R11 | README reproducible, arquitectura, despliegue y operación | P0 | ✅ | [README](../README.md), [architecture](architecture.md), [api](api.md), [deployment-operations](deployment-operations.md). |
 | R12 | Trunk Based Development + historial | P0 | ✅ | Commits pequeños a `main` con Conventional Commits, CI en cada push. |
-| R13 | Demostración funcional (video) | P0 | 🚧 | Se graba al cierre, en Android. |
-| B1 | Integración nativa (`FLAG_SECURE` / app switcher) | P1 | 📄 | F10, segundo candidato a corte. |
+| R13 | Demostración funcional | P0 | ✅ | Recorrido en Android; configuración SDUI para el cambio en vivo en [`demo/`](demo/). |
+| B1 | Integración nativa (`FLAG_SECURE` / app switcher) | P1 | 📄 | F10, pendiente. |
 | B2 | Asistente generativo | P2 | ✅ | ✅ Backend `POST /assistant` acotado con fallback determinista (Gemini deshabilitado en el despliegue). ✅ Pantalla `/assistant` (F11): 3 preguntas predefinidas, respuesta de solo lectura con el mismo renderer SDUI, etiqueta de origen (IA verificada / resumen automático), estados loading/error/no disponible. |
 | B3 | Automatizaciones dev/test/deploy/docs | P1 | ✅ | CI (format/analyze/test/coverage), release por tag con APK ofuscado y deploy opcional de Firebase, hook de Claude Code que formatea cada `.dart`, Dart MCP, Dependabot, prompts versionados. 📄 comando para ADRs y changelog automático. |
 
@@ -48,9 +47,9 @@ completo y verificable en lugar de muchas piezas a medias.
 | iOS compilado y push en iOS | Android es la plataforma de la demo; iOS queda configurado pero no se compiló en esta iteración. |
 | Multi-país / multimoneda | Un país (Ecuador), USD. `Money` en centavos permite extenderlo. |
 | Melos, feature-per-package | Pub workspaces + Makefile bastan para 4 miembros; se evalúa al crecer el equipo. |
-| Micro-app: timeout de carga, validación completa del payload, modo emulador | Alcance de F6 reducido por deadline; registrado como deuda en [risks-assumptions](risks-assumptions.md). |
+| Micro-app: timeout de carga, validación completa del payload, modo emulador | Alcance de F6 reducido por tiempo; registrado como deuda en [risks-assumptions](risks-assumptions.md). |
 
-## Valor entregado
+## Valor
 
 - **Negocio sin release:** el home por segmento y sus ofertas se cambian en segundos desde el backend, con
   validación previa y sin riesgo de romper la app (componentes desconocidos se ignoran, documentos inválidos
