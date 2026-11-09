@@ -33,7 +33,7 @@ verificable en lugar de muchas piezas a medias.
 | R13 | Demostración funcional | P0 | ✅ | Recorrido en Android; configuración SDUI para el cambio en vivo en [`demo/`](demo/). |
 | B1 | Integración nativa (`FLAG_SECURE` / app switcher) | P1 | 📄 | F10, pendiente. |
 | B2 | Asistente generativo | P2 | ✅ | ✅ Backend `POST /assistant` acotado con fallback determinista (Gemini deshabilitado en el despliegue). ✅ Pantalla `/assistant` (F11): 3 preguntas predefinidas, respuesta de solo lectura con el mismo renderer SDUI, etiqueta de origen (IA verificada / resumen automático), estados loading/error/no disponible. |
-| B3 | Automatizaciones dev/test/deploy/docs | P1 | ✅ | CI (format/analyze/test/coverage), release por tag con APK ofuscado y deploy opcional de Firebase, hook de Claude Code que formatea cada `.dart`, Dart MCP, Dependabot, prompts versionados. 📄 comando para ADRs y changelog automático. |
+| B3 | Automatizaciones dev/test/deploy/docs | P1 | ✅ | CI (format/analyze/test/coverage), release por tag con APK ofuscado y deploy opcional de Firebase, hook de Claude Code que formatea cada `.dart`, Dart MCP, Dependabot security updates, prompts versionados. 📄 comando para ADRs y changelog automático. |
 
 ## Cortado o fuera de alcance, y por qué
 

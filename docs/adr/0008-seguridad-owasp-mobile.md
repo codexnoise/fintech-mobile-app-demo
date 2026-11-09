@@ -41,7 +41,7 @@ Controles implementados (resumen):
 - Reset de contraseña sin enumeración de usuarios.
 - Deep links de push con allowlist de rutas y apertura solo con sesión lista.
 - Release con `--obfuscate --split-debug-info` (`.github/workflows/release.yml`); `allowBackup=false`;
-  cleartext solo hacia emuladores en debug (`network_security_config`); Dependabot.
+  cleartext solo hacia emuladores en debug (`network_security_config`); Dependabot security updates.
 - Logs del backend sin PII (uid pseudonimizado), `X-Powered-By` deshabilitado, headers de seguridad.
 
 Documentado como evolución (📄): certificate/SPKI pinning, detección de root/jailbreak, `FLAG_SECURE` y
