@@ -15,6 +15,13 @@ updates:
     groups:
       backend:
         patterns: ["*"]
+    ignore:
+      # TS 7 elimina moduleResolution=node10 (migración de tsconfig aparte).
+      - dependency-name: typescript
+        update-types: ["version-update:semver-major"]
+      # Los tipos deben seguir el runtime de Cloud Functions (Node 22).
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: github-actions
     directory: /
     schedule: { interval: weekly }
